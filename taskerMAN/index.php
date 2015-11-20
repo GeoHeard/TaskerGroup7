@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>taskerMAN</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
