@@ -14,7 +14,7 @@
     <h2>
         Welcome
     </h2>
-    <form id="loginForm" action="tasksindex.php" method="POST">
+    <form id="loginForm" action="tasks/main.php" method="POST">
         <fieldset>
             <legend>Please log in</legend>
             <label>Username</label>
