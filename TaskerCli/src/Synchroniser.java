@@ -1,16 +1,28 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 /**
  * 
  * Provides all of the loading, synchronising and saving 
  * functionality of the program.
  * 
  * @author Group 07: kuh1, ...
- * @version 0.1
- * @date 24/11/2015
+ * @version 0.2
+ * @date 28/11/2015
  */
 public class Synchroniser {
 	
 	private String employeeEmail;
 	private TaskerCli tasker;
+	private String fileName;
 	
 	/**
 	 * Creates a new synchroniser for the input user.
@@ -20,19 +32,10 @@ public class Synchroniser {
 	 * 				A reference to the main program.
 	 */
 	public Synchroniser(String userEmail, TaskerCli mainProgram){
-		
-	}
-	
-	/**
-	 * Loads the relevant tasks (only those for the input user) from 
-	 * local storage into an array of task objects. Should only really
-	 * be called once per user.
-	 * @return
-	 * 		An array list of the tasks that are assigned to the input
-	 * 		user, or null of no tasks found.
-	 */
-	public Task[] retrieveTasksFromLocal(){
-		return null; 
+		employeeEmail = userEmail;
+		tasker = mainProgram;
+		//Either just use one file name or come up with a better system e.g. loop until a char not in the set{<a-b,A-B,0-9>} appears.
+		fileName = userEmail.substring(0, 3) + ".txt";
 	}
 	
 	/**
@@ -51,18 +54,67 @@ public class Synchroniser {
 	 * 		stored locally or online
 	 * @throws InvalidEmailException: No task or user data locally or online.
 	 */
-	public Task[] synchroniseTasks(Task[] currentTasks)/*throws ...*/{
+	public ArrayList<Task> synchroniseTasks(ArrayList<Task> currentTasks)/*throws ...*/{
+		ArrayList<Task> correctTasks = new ArrayList<Task>();
+		//True if we did make a connection to the sever, false if not
+		boolean didSync = false;
+		
+		correctTasks = retrieveFromSever();
+		//If we could contact the database
+		if(correctTasks != null){
+			
+		}else{
+			correctTasks = currentTasks;
+		}
+				
+		saveToLocal(correctTasks);
+		//If we could connect to TaskerSvr and have a correct list of tasks
+		if(didSync){
+			saveToSvr(correctTasks);
+		}
+		
+		
+		return correctTasks;
+	}
+	
+	/**
+	 * Retrieve the list of tasks marked 'allocated' for the user from TaskerSvr
+	 * @return
+	 * 		The list of tasks or null of none found/no connection made
+	 */
+	private ArrayList<Task> retrieveFromSever(){
+		//To be implemented 
 		return null;
 	}
 	
 	/**
-	 * Saves the input list of tasks into local storage, overwriting what is 
-	 * currently there.
+	 * Saves the input list of tasks into local storage, creating a file called,
+	 * <abc>.txt where <abc> is the first 3 characters of the users email.
 	 * @param tasks
 	 * 			The list of tasks to save.
 	 */
-	private void saveToLocal(Task[] tasks){
+	private void saveToLocal(ArrayList<Task> tasks){
+		if(tasks == null){
+			return;
+		}
 		
+		//Create a file writer
+		try(FileWriter fw = new FileWriter(fileName);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter outfile = new PrintWriter(bw);){
+				
+			//Output user email on the first line
+			outfile.println(employeeEmail);
+			//Output Number of tasks on the second
+			outfile.println(tasks.size());
+			//Output each tasks details in the rest of the document
+			for(int i = 0; i < tasks.size(); i++){
+				tasks.get(i).saveInfo(outfile);	
+			}
+
+		} catch (IOException e) {
+			System.err.println("Problem when trying to write to file: " + fileName);
+		}
 	}
 	
 	/**
@@ -70,11 +122,88 @@ public class Synchroniser {
 	 * @param tasks
 	 * 			The list of tasks to save.
 	 */
-	private void saveToSvr(Task[] tasks){
+	private void saveToSvr(ArrayList<Task> tasks){
+		//To be implemented
+	}
+	
+	/**
+	 * Loads the relevant tasks (only those for the input user) from 
+	 * local storage into an array of task objects. Should only really
+	 * be called once per user per program run.
+	 * @return
+	 * 		An array list of the tasks that are assigned to the input
+	 * 		user, or null of no tasks found.
+	 */
+	public ArrayList<Task> retrieveTasksFromLocal(){
+		ArrayList<Task> tasks = new ArrayList<Task>();
+	
+		//Try to read from the users file
+		try(FileReader fr = new FileReader(fileName);
+			BufferedReader br = new BufferedReader(fr);
+			Scanner infile = new Scanner(br)){
+			
+			//The email stored in the file
+			String foundEmail;
+			//The amount of tasks stored
+			int noTasks;
+			//The amount of elements stored for the task being read
+			int noElements;
+			
+			foundEmail = infile.nextLine();
+			//If the email's don't match return null as there is no task data for this user locally
+			if(!employeeEmail.equals(foundEmail)){
+				return null;
+			}
+			
+			noTasks = infile.nextInt();
+			infile.nextLine();
+			//loop for each task
+			for(int i = 0; i < noTasks; i++){
+				Task task;
+				//The tasks title
+				String title;
+				//The tasks elements and comments
+				String[] elements;
+				String[] comments;
+				
+				//Read the general task information
+				title = infile.nextLine();
+				//Read the start date
+				//Read the complete date
+				
+				//Read the amount of elements and initialise the arrays
+				noElements = infile.nextInt();
+				infile.nextLine();
+				elements = new String[noElements];
+				comments = new String[noElements];
+				
+				//loop to store the elements and comments
+				for(int j = 0; j < noElements; j++){
+					elements[j] = infile.nextLine();
+					comments[j] = infile.nextLine();
+				}
+				
+				//Create a new tasks with this information. Only allocated files will have been saved.
+				task = new Task(title, employeeEmail, Status.ALLOCATED, elements, comments, tasker);
+				tasks.add(task);
+			}
+			
+		//Catch the various possible errors, such as the user not having a file
+		} catch (FileNotFoundException e) {
+			System.err.println("Load error 1");
+			return null;
+		} catch (IOException e) {
+			System.err.println("Load error 2");
+			return null;
+		} catch (InputMismatchException e) {
+			System.err.println("Load error 3");
+			return null;
+		}
 		
+		return tasks;
 	}
 	
 	/*
-	private void invokeSynchronise(Task[] tasks)
+	private void invokeSynchronise(ArrayList<Task> tasks)
 	 */
 }
