@@ -79,7 +79,9 @@ public class TaskerCli {
 		System.out.println("Welcome, here are your assigned tasks: ");
 		//List each of the users tasks
 		for(int i = 0; i < tasks.size(); i++){
-			System.out.println("   Task " + i + ": " + tasks.get(i).getTitle());
+			if(tasks.get(i).getStatus().equals(Status.ALLOCATED)){
+				System.out.println("   Task " + i + ": " + tasks.get(i).getTitle());
+			}
 		}
 		
 		//Ask the user to select a task.
@@ -95,12 +97,21 @@ public class TaskerCli {
 				chosenTask = -1;
 			}
 			
-			//If the choice isnt valid
+			//If the input number isn't a task index
 			if(chosenTask < 0 || chosenTask > tasks.size() - 1){
 				//If they want to quit
 				if(chosenTask == -2){
 					System.exit(0);
 				}else{
+					//we must continue looping
+					System.err.println("Invalid input");
+					chosenTask = -1;
+				}
+			}
+			
+			//If the chosen task is marked as completed or abandoned 
+			if(chosenTask >= 0){
+				if(!tasks.get(chosenTask).getStatus().equals(Status.ALLOCATED)){
 					//we must continue looping
 					System.err.println("Invalid input");
 					chosenTask = -1;

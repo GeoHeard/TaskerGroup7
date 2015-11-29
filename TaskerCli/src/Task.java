@@ -160,8 +160,9 @@ public class Task {
 	 * 		An already initialised printWriter so that we can write into the associated file.
 	 */
 	public void saveInfo(PrintWriter pw){
-		//Print the general task information, ignoring status as only allocated tasks will be saved.
+		//Print the general task information
 		pw.println(title);
+		pw.println(status);
 		//pw.println(start);
 		//pw.println(end);
 		
@@ -176,5 +177,9 @@ public class Task {
 	
 	public String getTitle(){
 		return title;
+	}
+	
+	public Status getStatus(){
+		return status;
 	}
 }

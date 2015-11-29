@@ -56,23 +56,22 @@ public class Synchroniser {
 	 */
 	public ArrayList<Task> synchroniseTasks(ArrayList<Task> currentTasks)/*throws ...*/{
 		ArrayList<Task> correctTasks = new ArrayList<Task>();
-		//True if we did make a connection to the sever, false if not
-		boolean didSync = false;
 		
+		//Attempt to make contact with the server
 		correctTasks = retrieveFromSever();
+		
 		//If we could contact the database
 		if(correctTasks != null){
 			
-		}else{
-			correctTasks = currentTasks;
-		}
-				
-		saveToLocal(correctTasks);
-		//If we could connect to TaskerSvr and have a correct list of tasks
-		if(didSync){
-			saveToSvr(correctTasks);
-		}
+			//Sync code e.g. local updates have priority
 		
+			saveToLocal(correctTasks);
+			saveToSvr(correctTasks);
+		}else{
+			//There isnt anything to do but save to local storage
+			correctTasks = currentTasks;
+			saveToLocal(correctTasks);
+		}
 		
 		return correctTasks;
 	}
@@ -162,14 +161,28 @@ public class Synchroniser {
 				Task task;
 				//The tasks title
 				String title;
+				//The string read from the file for status
+				String readStatus;
+				//The status interpreted from the above string
+				Status status;
 				//The tasks elements and comments
 				String[] elements;
 				String[] comments;
 				
 				//Read the general task information
 				title = infile.nextLine();
+				readStatus = infile.nextLine(); 
 				//Read the start date
 				//Read the complete date
+				
+				//Allocate the status based on the string
+				if(readStatus.substring(0, 2).equals("AL")){
+					status = Status.ALLOCATED;
+				}else if(readStatus.substring(0, 2).equals("AB")){
+					status = Status.ABANDONED;
+				}else{
+					status = Status.COMPLETE;
+				}
 				
 				//Read the amount of elements and initialise the arrays
 				noElements = infile.nextInt();
@@ -183,8 +196,8 @@ public class Synchroniser {
 					comments[j] = infile.nextLine();
 				}
 				
-				//Create a new tasks with this information. Only allocated files will have been saved.
-				task = new Task(title, employeeEmail, Status.ALLOCATED, elements, comments, tasker);
+				//Create a new tasks with this information
+				task = new Task(title, employeeEmail, status, elements, comments, tasker);
 				tasks.add(task);
 			}
 			
