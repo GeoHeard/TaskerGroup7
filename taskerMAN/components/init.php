@@ -3,10 +3,10 @@ function loadInit($contentToLoad)
 {
     $buttonPath = "";
 
-    echo "<script>alert(" . getcwd() . ")</script>";
-
     echo "<header>";
     echo "<h1>taskerMAN</h1>";
+
+    // May try and use absolute links in the future
 
     if ($contentToLoad == "default") {
         echo "<a href='tasks/main.php'><h3>Manage tasks</h3></a>";
@@ -28,7 +28,7 @@ function loadInit($contentToLoad)
         echo "<nav>";
         echo "<div id='navTop'>";
         echo "<form id='navTopNewButton' action='" . $buttonPath . "' method='POST'>";
-        echo "<input type='submit' value='New" . $contentToLoad . "'/>";
+        echo "<input type='submit' value='New " . $contentToLoad . "'/>";
         echo "</form>";
         if ($contentToLoad == "task") {
             echo "<form id='navTopFilterButton' action='../tasks/filtertask.php' method='POST'>";
@@ -43,6 +43,7 @@ function loadInit($contentToLoad)
         echo "</div>";
         echo "</nav>";
     } else {
+        echo "<main>";
         echo "<h2>Welcome</h2>";
         echo "<form id='loginForm' action='tasks/main.php' method='POST'>";
         echo "<fieldset>";
@@ -56,6 +57,7 @@ function loadInit($contentToLoad)
         echo "<input type='submit' id='loginFormSubmit' value='Login' />";
         echo "</fieldset>";
         echo "</form>";
+        echo "</main>";
     }
 
 
