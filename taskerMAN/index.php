@@ -10,6 +10,12 @@
     <a href="memberindex.php"><h3>Manage members</h3></a>
     <hr />
 </header>
+
+<?php
+require("components/init.php");
+loadInit("default");
+?>
+
 <main>
     <h2>
         Welcome
