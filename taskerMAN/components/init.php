@@ -1,27 +1,48 @@
 <?php
-function loadInit($contentToLoad){
-    $uniqueValue = "";
+function loadInit($contentToLoad)
+{
+    $buttonPath = "";
 
-    if($contentToLoad == "default"){
+    echo "<script>alert(" . getcwd() . ")</script>";
 
-    }else if ($contentToLoad == "tasks"){
+    echo "<header>";
+    echo "<h1>taskerMAN</h1>";
 
-    }else if ($contentToLoad == "members"){
-
-    }else{
-        echo "<script>alert('Error init.php')</script>";
+    if ($contentToLoad == "default") {
+        echo "<a href='tasks/main.php'><h3>Manage tasks</h3></a>";
+        echo "<a href='members/main.php'><h3>Manage members</h3></a>";
+    } else if ($contentToLoad == "task") {
+        $buttonPath = "newtask.php";
+        echo "<a href='main.php'><h3>Manage tasks</h3></a>";
+        echo "<a href='../members/main.php'><h3>Manage members</h3></a>";
+    } else if ($contentToLoad == "member") {
+        $buttonPath = "newmember.php";
+        echo "<a href='../tasks/main.php'><h3>Manage tasks</h3></a>";
+        echo "<a href='main.php'><h3>Manage members</h3></a>";
     }
 
-echo "<header>";
-echo "<h1>taskerMAN</h1>";
-echo "<a href='../tasks/main.php'><h3>Manage tasks</h3></a>";
-echo "<a href='../members/main.php'><h3>Manage members</h3></a>";
-echo "<hr />";
-echo "</header>";
+    echo "<hr />";
+    echo "</header>";
 
-    if($contentToLoad != "default"){
+    if ($contentToLoad != "default") {
+        echo "<nav>";
+        echo "<div id='navTop'>";
+        echo "<form id='navTopNewButton' action='" . $buttonPath . "' method='POST'>";
+        echo "<input type='submit' value='New" . $contentToLoad . "'/>";
+        echo "</form>";
+        if ($contentToLoad == "task") {
+            echo "<form id='navTopFilterButton' action='../tasks/filtertask.php' method='POST'>";
+            echo "<input type='submit' value='Filter tasks'/>";
+            echo "</form>";
+        }
+        echo "</div>";
+        echo "<div id='navBody'>";
 
-    }else{
+//require("../components/dbextract.php");
+
+        echo "</div>";
+        echo "</nav>";
+    } else {
         echo "<h2>Welcome</h2>";
         echo "<form id='loginForm' action='tasks/main.php' method='POST'>";
         echo "<fieldset>";
@@ -37,29 +58,7 @@ echo "</header>";
         echo "</form>";
     }
 
-echo "<nav>";
-echo "<div id='navTop'>";
-echo "<form id='navTopNewButton' action='../members/newmember.php' method='POST'>";
-echo "<input type='submit' value='New member'/>";
-echo "</form>";
-    if ($contentToLoad == "tasks"){
-        echo "<form id='navTopFilterButton' action='filtertask.php' method='POST'>";
-        echo "<input type='submit' value='Filter tasks'/>";
-        echo "</form>";
-    }
-echo "</div>";
-echo "<div id='navBody'>";
 
-//require("../components/dbextract.php");
-
-echo "</div>";
-echo "</nav>";
-echo "<main>";
-echo "<div id='mainTop'>";
-echo "<h2>Manage members</h2>";
-echo "</div>";
-echo "<div id='mainBody'>";
-echo "</div>";
-echo "</main>";
 }
+
 ?>
