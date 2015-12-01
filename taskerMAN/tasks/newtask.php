@@ -1,7 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>taskerMAN - New task</title>
+</head>
+<body>
+
 <?php
-/**
- * Created by PhpStorm.
- * User: Chris
- * Date: 01/12/2015
- * Time: 10:11
- */
+require("../components/init.php");
+loadInit("task");
+?>
+
+<main>
+    <div id="mainTop">
+        <h2>Manage tasks</h2>
+    </div>
+    <div id="mainBody">
+
+    </div>
+</main>
+
+</body>
+</html>

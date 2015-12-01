@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>taskerMAN</title>
+    <title>taskerMAN - Manage tasks</title>
 </head>
 <body>
 
