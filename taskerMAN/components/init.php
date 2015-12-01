@@ -59,8 +59,6 @@ function loadInit($contentToLoad)
         echo "</form>";
         echo "</main>";
     }
-
-
 }
 
 ?>
