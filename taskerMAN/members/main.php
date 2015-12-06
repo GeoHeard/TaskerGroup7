@@ -7,7 +7,7 @@
 
 <?php
 require("../components/init.php");
-loadInit("member");
+loadInit("member", $conn);
 ?>
 
 <main>

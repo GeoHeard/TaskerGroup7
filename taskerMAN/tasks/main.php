@@ -7,7 +7,7 @@
 
 <?php
 require("../components/init.php");
-loadInit("task");
+loadInit("task", $conn);
 ?>
 
 <main>

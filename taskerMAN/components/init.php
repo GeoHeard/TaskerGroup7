@@ -1,6 +1,23 @@
 <?php
-function loadInit($contentToLoad)
+$servername = "db.dcs.aber.ac.uk";
+$dbName = "csgp_7_15_16";
+$username = "csgpadm_7";
+$password = "Tbart8to";
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}
+catch(PDOException $e)
 {
+    echo "Connection failed: " . $e->getMessage();
+}
+
+function loadInit($contentToLoad, $conn){
+    //global $conn;
+
+    $tableToUse = "";
     $buttonPath = "";
 
     echo "<header>";
@@ -15,10 +32,12 @@ function loadInit($contentToLoad)
         $buttonPath = "newtask.php";
         echo "<a href='main.php'><h3>Manage tasks</h3></a>";
         echo "<a href='../members/main.php'><h3>Manage members</h3></a>";
+        $tableToUse = "Task";
     } else if ($contentToLoad == "member") {
         $buttonPath = "newmember.php";
         echo "<a href='../tasks/main.php'><h3>Manage tasks</h3></a>";
         echo "<a href='main.php'><h3>Manage members</h3></a>";
+        $tableToUse = "TeamMember";
     }
 
     echo "<hr />";
@@ -38,8 +57,19 @@ function loadInit($contentToLoad)
         echo "</div>";
         echo "<div id='navBody'>";
 
-//require("../components/dbextract.php");
+        $query = "";
 
+        if($contentToLoad == "task"){
+            $query = "SELECT title FROM Task";
+            foreach($conn->query($query) as $row){
+                echo "<p>" . $row['title'] . "</p>";
+            }
+        }else if ($contentToLoad == "member"){
+            $query = "SELECT lastName, firstName FROM TeamMember";
+            foreach($conn->query($query) as $row){
+                echo "<p>" . $row['lastName'] . ", " . $row['firstName'] . "</p>";
+            }
+        }
         echo "</div>";
         echo "</nav>";
     } else {
