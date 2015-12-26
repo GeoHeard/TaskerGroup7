@@ -26,7 +26,7 @@ if(!((isset($_GET['taskSelect'])) || isset($_GET['editMode']) )){
 
 <?php
 require_once("../components/init.php");
-loadInit("task", false, null, $conn);
+loadInit("task", $conn);
 $sth = $conn->prepare("SELECT title, memberEmail, startDate, ecd, status FROM Task WHERE taskID=" . array_keys($_GET)[1]);
 $sth->execute();
 $currTask = $sth->fetch(PDO::FETCH_ASSOC);

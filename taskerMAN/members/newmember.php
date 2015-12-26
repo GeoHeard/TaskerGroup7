@@ -8,7 +8,7 @@
 
 <?php
 require_once("../components/init.php");
-loadInit("member", false, null, $conn);
+loadInit("member", $conn);
 ?>
 
 <main>

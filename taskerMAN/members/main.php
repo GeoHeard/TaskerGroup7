@@ -8,9 +8,9 @@
 <?php
 require_once("../components/init.php");
 if(isset($_GET['refineSubmit'])){
-    loadInit("member", true, null, $conn);
+    loadInit("member", $conn);
 }else{
-    loadInit("member", false, null, $conn);
+    loadInit("member", $conn);
 }
 
 ?>

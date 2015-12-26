@@ -8,7 +8,7 @@
 
 <?php
 require_once("../components/init.php");
-loadInit("task", false, null, $conn);
+loadInit("task", $conn);
 ?>
 
 <main>

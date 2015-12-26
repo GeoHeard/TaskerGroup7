@@ -14,7 +14,7 @@ catch(PDOException $e)
     echo "Connection failed: " . $e->getMessage();
 }
 
-function loadInit($contentToLoad, $filterResults, $filterCriteria, $conn){
+function loadInit($contentToLoad, $conn){
     $tableToUse = "";
     $buttonPath = "";
 
