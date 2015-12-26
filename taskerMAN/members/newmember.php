@@ -2,38 +2,13 @@
 <html lang="en">
 <head>
     <title>taskerMAN - New member</title>
-    <script>
-        function validateNewTask() {
-            var titleField = document.getElementById("taskTitle");
-            var startDateField = document.getElementById("startDate");
-            var completionDateField = document.getElementById("completionDate");
-
-            if(titleField.value.length != 0){
-                if(titleField.value.length >= 5){
-                    if(startDateField.value.length != 0){
-                        if(completionDateField.value.length != 0){
-                            return true;
-                        }else{
-                            alert("Please specify the task's estimated completiton date");
-                        }
-                    }else{
-                        alert("Please specify the task's start date")
-                    }
-                }else{
-                    alert("Please specify a task title of length 5 or greater")
-                }
-            }else{
-                alert("Please specify a task title");
-            }
-            return false;
-        }
-    </script>
+    <script src="../components/validators/validateNewMember.js"></script>
 </head>
 <body>
 
 <?php
-require("../components/init.php");
-loadInit("task", $conn);
+require_once("../components/init.php");
+loadInit("member", false, null, $conn);
 ?>
 
 <main>
@@ -41,7 +16,7 @@ loadInit("task", $conn);
         <h2>New member</h2>
     </div>
     <div id="mainBody">
-        <form id="newTaskForm" name="newTaskForm" onsubmit='return validateNewTask()' action="../components/processnew.php" method="GET">
+        <form id="newMemberForm" name="newMemberForm" onsubmit='return validateNewMember()' action="../components/processnew.php" method="GET">
             <fieldset>
                 <label for="taskTitle">Task title</label>
                 <input type="text" id="taskTitle" name="taskTitle" />

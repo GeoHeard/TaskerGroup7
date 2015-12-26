@@ -14,9 +14,7 @@ catch(PDOException $e)
     echo "Connection failed: " . $e->getMessage();
 }
 
-function loadInit($contentToLoad, $conn){
-    //global $conn;
-
+function loadInit($contentToLoad, $filterResults, $filterCriteria, $conn){
     $tableToUse = "";
     $buttonPath = "";
 
@@ -60,10 +58,13 @@ function loadInit($contentToLoad, $conn){
         $query = "";
 
         if($contentToLoad == "task"){
-            $query = "SELECT title FROM Task";
+            $query = "SELECT taskID, title FROM Task ORDER BY ecd";
+            echo "<form action='../tasks/viewtask.php' method='GET'>";
+            echo "<input type='hidden' name='taskSelect' value='1' />";
             foreach($conn->query($query) as $row){
-                echo "<p>" . $row['title'] . "</p>";
+                echo "<input type='submit' name='" . $row['taskID'] . "' value='" . $row['title'] . "' />";
             }
+            echo "</form>";
         }else if ($contentToLoad == "member"){
             $query = "SELECT lastName, firstName FROM TeamMember";
             foreach($conn->query($query) as $row){

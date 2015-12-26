@@ -7,8 +7,8 @@
 <body>
 
 <?php
-require("components/init.php");
-loadInit("default", $conn);
+require_once("components/init.php");
+loadInit("default", false, null, $conn);
 ?>
 
 </body>
