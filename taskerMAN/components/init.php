@@ -73,22 +73,6 @@ function loadInit($contentToLoad, $conn){
         }
         echo "</div>";
         echo "</nav>";
-    } else {
-        echo "<main>";
-        echo "<h2>Welcome</h2>";
-        echo "<form id='loginForm' action='tasks/main.php' method='POST'>";
-        echo "<fieldset>";
-        echo "<legend>Please log in</legend>";
-        echo "<label>Username</label>";
-        echo "<input type='text' id='loginFormUsername' />";
-        echo "<br />";
-        echo "<label>Password</label>";
-        echo "<input type='text' id='loginFormPassword' />";
-        echo "<br />";
-        echo "<input type='submit' id='loginFormSubmit' value='Login' />";
-        echo "</fieldset>";
-        echo "</form>";
-        echo "</main>";
     }
 }
 
