@@ -34,14 +34,14 @@ Version: 1.0
 Matters Arising
 ——————————————————————————————
 
-The Design Specification needs to be looked at and started to be filled in, allocating parts of this is required so everyone knows what they’re doing
-Draw a Gantt Chart in basic fashion, and attempt to get this in Project Plan by next week
+    - The Design Specification needs to be looked at and started to be filled in, allocating parts of this is required so everyone knows what they’re doing
+    - Draw a Gantt Chart in basic fashion, and attempt to get this in Project Plan by next week
 
 
 Actions Arising
 ——————————————————————————————
 
-Get everything we have done this far in the github repository for ease of access
-Get a Gantt chart done, with estimation of time spent
-Complete the Design Specification to standards
-Get a framework done for taskerMAN and a semi-working prototype for taskerCLI
+   - Get everything we have done this far in the github repository for ease of access
+   - Get a Gantt chart done, with estimation of time spent
+   - Complete the Design Specification to standards
+   - Get a framework done for taskerMAN and a semi-working prototype for taskerCLI
