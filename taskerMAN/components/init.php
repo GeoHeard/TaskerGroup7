@@ -21,7 +21,7 @@ function loadInit($contentToLoad, $conn){
     echo "<header>";
     echo '
     <ul>
-    <li class="logo"><a href="../index.php"><h1>taskerMAN</h1></a></li>
+    <li class="logo"><a href="../index.php"><h1>taskerMAN - Unicorn Edition</h1></a></li>
     ';
 
     // May try and use absolute links in the future
