@@ -33,12 +33,13 @@ Version: 1.0
 Matters Arising 
 ————————————————————————————————
 
+No matters arising, only actions requiring completion for the advancement of the product
 
 
 Actions Arising
 ————————————————————————————————
 
-Populate the database
-Submit the Gantt Chart
-Continue developing taskerMAN and taskerCLI
-E-mail Nigel regarding where we are hosting the taskerMAN
+    - Populate the database
+    - Submit the Gantt Chart
+    - Continue developing taskerMAN and taskerCLI
+    - E-mail Nigel regarding where we are to host taskerMAN
