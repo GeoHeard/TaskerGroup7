@@ -1,0 +1,63 @@
+Group Project Minutes -  14/10/2015
+
+Project: Group project 07
+Meeting: Weekly project meeting
+Persons present: 
+
+Wayne Aubrey- waa2
+Bassi, Christopher Rino crb15
+Doyle, Thomas William twd
+Dugdale, Edward edd15
+Hallam, Jacob jah51
+Heard, George geh39
+Hodges, Kurt kuh1
+Gombar, Ivan ivg
+
+Place and date of meeting: C55, Tuesday 14th of October 2015
+ 
+Circulation list: 
+
+Wayne Aubrey- waa2
+Bassi, Christopher Rino crb15
+Doyle, Thomas William twd
+Dugdale, Edward edd15
+Gombar, Ivan ivg
+Hallam, Jacob jah51
+Heard, George geh39
+Hodges, Kurt kuh1
+
+
+
+
+
+
+
+
+Author: George Heard
+ 
+Date of minutes: Oct 14th
+Version: 1.1
+
+
+Matters Arising
+-----------------------------------------------
+
+	◦	Database will be worked on by Edward and Ivan (with help from anyone who is proficient in database creation)
+	◦	The Web app aspect is for use by the manager only to designate the users/workers with tasks, the users themselves will not actually use the web app
+	◦	Users on the desktop app can edit the completion of the task, such as mark certain actions as being done
+	◦	Later on consider authentication and authorisation within the app
+	◦	Ask Wayne whether multiple team members can be assigned to one task
+	◦	Whether on completion the manager should be pinged and set the task as completed
+	◦	We need to look into reallocation of tasks to other users, and whether we need to put this as part of ‘abandoned’ status 
+	◦	Whether the user should be able to add a comment/reason when they decide to abandon a task and then the manager can decide whether he actually wants to abandon/reallocate the task
+	◦	Whether or not we need to have a more advanced filter/search functionality 
+	◦	If user needs to have a password alongside their e-mail, or whether the e-mail being recorded locally is enough security
+	◦	The desktop application needs to store data locally in case there is no network connection, also a task being edit should cause automatic synchronisation and if not every 5 minutes the app should be synched anyway
+	◦	HTTP? FTP?
+	◦	Use GitHub to allow us to edit all each others code and also get a good insight into how we’ve implemented code along with comment people put with code itself
+	◦	The app should be able to handle 20 team members and 30 allocated tasks 
+
+Actions Arising
+———————————————————————
+
+	•	E-mail Nigel Hardy with our queries
