@@ -5,7 +5,8 @@ function validateNewTask() {
 
     if (titleField.value.length != 0) {
         if (titleField.value.length >= 5) {
-            if (/^[a-zA-Z0-9]+$/.test(titleField.value)) {
+            // ^[a-zA-Z0-9_]*$
+            if (/^([a-zA-Z]+\s)*[a-zA-Z]+$/.test(titleField.value)) {
                 if (titleField.value.length <= 64) {
                     if (startDateField.value.length != 0) {
                         if (completionDateField.value.length != 0) {
