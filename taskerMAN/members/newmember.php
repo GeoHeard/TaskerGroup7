@@ -9,6 +9,7 @@
 <?php
 require_once("../components/init.php");
 loadInit("member", $conn);
+header("refresh:300;url=../timeout.php");
 ?>
 
 <main>
@@ -18,22 +19,17 @@ loadInit("member", $conn);
     <div id="mainBody">
         <form id="newMemberForm" name="newMemberForm" onsubmit='return validateNewMember()' action="../components/processnew.php" method="GET">
             <fieldset>
-                <label for="taskTitle">Task title</label>
-                <input type="text" id="taskTitle" name="taskTitle" />
+                <label for="memberLastName">Last name</label>
+                <input type="text" id="memberLastName" name="memberLastName" />
                 <br />
-                <label for="teamMember">Allocated team member</label>
-                <?php
-                require("../components/populateDropDown.php");
-                ?>
+                <label for="memberFirstName">First name</label>
+                <input type="text" id="memberFirstName" name="memberFirstName" />
                 <br />
-                <label for="startDate">Start date</label>
-                <input type="date" id="startDate" name="startDate" />
-                <br />
-                <label for="completionDate">Expected completion date</label>
-                <input type="date" id="completionDate" name="completionDate" />
+                <label for="memberEmail">E-mail address</label>
+                <input type="text" id="memberEmail" name="memberEmail" />
                 <hr />
-                <input type="submit" name="newSubmit" value="Create" />
-                <input type="submit" name="newSubmit" value="Cancel" />
+                <input type="submit" name="newMemberSubmit" value="Create" />
+                <input type="submit" name="newMemberSubmit" value="Cancel" />
             </fieldset>
         </form>
     </div>

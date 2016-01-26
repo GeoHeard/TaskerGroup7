@@ -3,6 +3,7 @@ $servername = "db.dcs.aber.ac.uk";
 $dbName = "csgp_7_15_16";
 $username = "csgpadm_7";
 $password = "Tbart8to";
+$rootpath = "crb15/taskerMAN";
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
@@ -17,22 +18,26 @@ catch(PDOException $e)
 function loadInit($contentToLoad, $conn){
     $tableToUse = "";
     $buttonPath = "";
+    global $rootpath;
 
     echo "<header>";
-    echo "<h1>taskerMAN</h1>";
+
 
     // May try and use absolute links in the future
 
     if ($contentToLoad == "default") {
+        echo "<a href='index.php'><h1>taskerMAN</h1></a>";
         echo "<a href='tasks/main.php'><h3>Manage tasks</h3></a>";
         echo "<a href='members/main.php'><h3>Manage members</h3></a>";
     } else if ($contentToLoad == "task") {
         $buttonPath = "newtask.php";
+        echo "<a href='../index.php'><h1>taskerMAN</h1></a>";
         echo "<a href='main.php'><h3>Manage tasks</h3></a>";
         echo "<a href='../members/main.php'><h3>Manage members</h3></a>";
         $tableToUse = "Task";
     } else if ($contentToLoad == "member") {
         $buttonPath = "newmember.php";
+        echo "<a href='../index.php'><h1>taskerMAN</h1></a>";
         echo "<a href='../tasks/main.php'><h3>Manage tasks</h3></a>";
         echo "<a href='main.php'><h3>Manage members</h3></a>";
         $tableToUse = "TeamMember";
@@ -48,7 +53,7 @@ function loadInit($contentToLoad, $conn){
         echo "<input type='submit' value='New " . $contentToLoad . "'/>";
         echo "</form>";
         if ($contentToLoad == "task") {
-            echo "<form id='navTopFilterButton' action='../tasks/filtertask.php' method='POST'>";
+            echo "<form id='navTopFilterButton' action='../tasks/filtertasks.php' method='POST'>";
             echo "<input type='submit' value='Filter tasks'/>";
             echo "</form>";
         }
@@ -66,9 +71,10 @@ function loadInit($contentToLoad, $conn){
             }
             echo "</form>";
         }else if ($contentToLoad == "member"){
-            $query = "SELECT lastName, firstName FROM TeamMember";
+            $query = "SELECT lastName, firstName, email FROM TeamMember";
             foreach($conn->query($query) as $row){
-                echo "<p>" . $row['lastName'] . ", " . $row['firstName'] . "</p>";
+                echo "<input type='submit' name='" . $row['email'] . "' value='" . $row['lastName'] . ", " . $row['firstName'] . "' />";
+                //echo "<p>" . $row['lastName'] . ", " . $row['firstName'] . "</p>";
             }
         }
         echo "</div>";

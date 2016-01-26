@@ -3,12 +3,16 @@
 <head>
     <title>taskerMAN - New task</title>
     <script src="../components/validators/validateNewTask.js"></script>
+    <script>
+        document.getElementById("myRange").min;
+    </script>
 </head>
 <body>
 
 <?php
 require_once("../components/init.php");
 loadInit("task", $conn);
+header("refresh:300;url=../timeout.php");
 ?>
 
 <main>
@@ -27,13 +31,13 @@ loadInit("task", $conn);
                     ?>
                 <br />
                 <label for="startDate">Start date</label>
-                <input type="date" id="startDate" name="startDate" />
+                <input type="date" id="startDate" name="startDate" onclick="setMin()" />
                 <br />
                 <label for="completionDate">Expected completion date</label>
                 <input type="date" id="completionDate" name="completionDate" />
                 <hr />
-                <input type="submit" name="newSubmit" value="Create" />
-                <input type="submit" name="newSubmit" value="Cancel" />
+                <input type="submit" name="newTaskSubmit" value="Create" />
+                <input type="submit" name="newTaskSubmit" value="Cancel" />
             </fieldset>
         </form>
     </div>
