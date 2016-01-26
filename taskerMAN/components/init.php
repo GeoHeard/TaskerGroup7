@@ -22,16 +22,10 @@ function loadInit($contentToLoad, $conn){
     global $rootpath;
 
     echo "<header>";
-    echo '
-    <ul>
-    <li class="logo"><a href="../index.php"><h1>taskerMAN - Unicorn Edition</h1></a></li>
-    ';
-
-    // May try and use absolute links in the future
+    echo '<ul><li class="logo"><a href="../index.php"><h1>taskerMAN - Unicorn Edition</h1></a></li>';
 
     if ($contentToLoad == "default") {
         echo "
-
         <li><a href='tasks/main.php'><h1>Manage tasks</h1></a></li>";
         echo "
         <li><a href='members/main.php'><h1>Manage members</h1></a><li>
