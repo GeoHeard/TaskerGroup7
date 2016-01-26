@@ -5,6 +5,7 @@ $username = "csgpadm_7";
 $password = "Tbart8to";
 $rootpath = "crb15/taskerMAN";
 
+
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
     // set the PDO error mode to exception
