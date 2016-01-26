@@ -1,0 +1,116 @@
+package DbTest;
+
+// Much of this is required
+import java.sql.*;
+//import com.mysql.jdbc.Driver;
+
+//Database: csgp_7_15_16
+//User: csgpadm_7
+//Password: Tbart8to
+//On db.dcs.aber.ac.uk 
+ 
+public class DbTest {
+	// Database details
+	static final String driver = "com.mysql.jdbc.Driver";
+	static final String url = "jdbc:mysql://db.dcs.aber.ac.uk:3306/csgp_7_15_16";
+	static final String user = "csgpadm_7";
+	static final String password = "Tbart8to";
+	static Connection connect = null;
+	static Statement statement = null;
+	static ResultSet resultSet = null;
+	
+	public static void main(String[] args) {
+		try {
+			// Register driver
+			Class.forName(driver);
+			// Attempt to open  the connection
+			System.out.println("Connecting...");
+			connect = DriverManager.getConnection(url, user, password);
+			System.out.println("Connected!");
+			
+			// Run example commands
+			// List all users, add John Smith, list all users, delete John Smith, list all users
+			System.out.println("All Users: ");
+			listAll();
+			enterValue();
+			System.out.println("All Users: ");
+			listAll();
+			deleteValue();
+			System.out.println("All Users: ");
+			listAll();
+			
+			// Close connection
+			closeConnection();
+
+		// Catch and print problems to the console
+		} catch (Exception e) {
+			System.out.println("Something wrong; see error message.");
+			System.out.println(e.getMessage());
+		}	
+	}
+	
+	/**
+	 * This method will list records.
+	 */
+	public static void listAll() {
+		try {
+			// Execute query; store result in resultSet (fix table name)
+			statement = connect.createStatement();
+			// Example: select all from table TeamMember
+			resultSet = statement.executeQuery("SELECT * FROM TeamMember");
+		
+			// Extract data from resultSet (fix field name)
+			while (resultSet.next()) {
+				// Example: get column firstName and print to console
+				String name = resultSet.getString("firstName");
+				System.out.println(name);
+			}
+		} catch (Exception e) {
+			System.out.println("Something wrong; see error message.");
+			System.out.println(e.getMessage());
+		}	
+	}
+	
+	/**
+	 * This method will add a record.
+	 */
+	public static void enterValue() {
+		try {
+			String sql = "INSERT INTO TeamMember VALUES ('John','Smith','jsmith@gmail.com')";
+			statement = connect.createStatement();
+			statement.executeUpdate(sql);
+		} catch (Exception e) {
+			System.out.println("Something wrong; see error message.");
+			System.out.println(e.getMessage());
+		}	
+	}
+	
+	/**
+	 * This method will delete a record.
+	 */
+	public static void deleteValue() {
+		try {
+			String sql = "DELETE FROM TeamMember WHERE email = 'jsmith@gmail.com'";
+			statement = connect.createStatement();
+			statement.executeUpdate(sql);
+		} catch (Exception e) {
+			System.out.println("Something wrong; see error message.");
+			System.out.println(e.getMessage());
+		}	
+	}
+	
+	/**
+	 * This method will close the connection.
+	 */
+	public static void closeConnection() {
+		try {
+			connect.close();
+			statement.close();
+			resultSet.close();
+		}
+		catch (Exception e) {
+			System.out.println("Something wrong; see error message.");
+			System.out.println(e.getMessage());			
+		}
+	}
+}
