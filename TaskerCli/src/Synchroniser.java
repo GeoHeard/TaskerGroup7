@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.sql.*;
 
 /**
  * 
@@ -58,7 +59,7 @@ public class Synchroniser {
 		ArrayList<Task> correctTasks = new ArrayList<Task>();
 		
 		//Attempt to make contact with the server
-		correctTasks = retrieveFromSever();
+		correctTasks = retrieveFromSever(employeeEmail);
 		
 		//If we could contact the database
 		if(correctTasks != null){
@@ -81,8 +82,44 @@ public class Synchroniser {
 	 * @return
 	 * 		The list of tasks or null of none found/no connection made
 	 */
-	private ArrayList<Task> retrieveFromSever(){
-		//To be implemented 
+	private ArrayList<Task> retrieveFromSever(String employeeEmail){
+		 
+        String driver = "com.mysql.jdbc.Driver";
+		String url = "jdbc:mysql://db.dcs.aber.ac.uk/csgp_7_15_16";
+        String user = "csgpadm_7";
+        String password = "Tbart8to";
+        Connection connect = null;
+        java.sql.Statement statement = null;
+        ResultSet resultSet = null;
+                
+        
+        System.out.println("About to attempt to establish database connection.");
+        try {
+            System.out.println("Registering driver");
+        	// Register driver
+            Class.forName(driver);
+            System.out.println("Connecting...");
+            connect = DriverManager.getConnection(url, user, password);
+            System.out.println("Connected!");
+            Statement stmt = connect.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Task WHERE memberEmail='"+employeeEmail+"'");
+            // Extract data from resultSet (fix field name)
+            while (rs.next()) {
+            	String name = rs.getString("title");
+                System.out.println(name);
+            }
+            
+            // Close connection
+            rs.close();
+            stmt.close();
+            connect.close();
+        
+        // Catch and print problems to the console
+        } catch (Exception e) {
+            System.out.println("Something went wrong.");
+            System.out.println(e.getMessage());
+        }    
+
 		return null;
 	}
 	
