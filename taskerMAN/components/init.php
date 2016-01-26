@@ -21,32 +21,33 @@ function loadInit($contentToLoad, $conn){
     $buttonPath = "";
     global $rootpath;
 
+    echo "<link rel='stylesheet' href='../style.css'>";
+    echo "<link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic' rel='stylesheet' type='text/css'>";
+    echo "</head>";
+    echo "<body>";
     echo "<header>";
-    echo '<ul><li class="logo"><a href="../index.php"><h1>taskerMAN - Unicorn Edition</h1></a></li>';
 
     if ($contentToLoad == "default") {
-        echo "
-        <li><a href='tasks/main.php'><h1>Manage tasks</h1></a></li>";
-        echo "
-        <li><a href='members/main.php'><h1>Manage members</h1></a><li>
-        </ul>";
+        echo "<ul>";
+        echo "<li class='logo'><a href='../index.php'><h1>taskerMAN</h1></a></li>";
+        echo "<li><a href='tasks/main.php'><h1>Manage tasks</h1></a></li>";
+        echo "<li><a href='members/main.php'><h1>Manage members</h1></a><li>";
+        echo "</ul>";
     } else if ($contentToLoad == "task") {
         $buttonPath = "newtask.php";
-        echo "
-        <ul>
-        <li><a href='main.php'><h3>Manage tasks</h3></a></li>";
-        echo "
-        <li><a href='../members/main.php'><h3>Manage members</h3></a></li>
-        </ul>";
+        echo "<ul>";
+        echo "<li class='logo'><a href='../index.php'><h1>taskerMAN</h1></a></li>";
+        echo "<li><a href='main.php'><h3>Manage tasks</h3></a></li>";
+        echo "<li><a href='../members/main.php'><h3>Manage members</h3></a></li>";
+        echo "</ul>";
         $tableToUse = "Task";
     } else if ($contentToLoad == "member") {
         $buttonPath = "newmember.php";
-        echo "
-        <ul>
-        <li><a href='../tasks/main.php'><h3>Manage tasks</h3></a></li>";
-        echo "
-        <li><a href='main.php'><h3>Manage members</h3></a></li>
-        </ul>";
+        echo "<ul>";
+        echo "<li class='logo'><a href='../index.php'><h1>taskerMAN</h1></a></li>";
+        echo "<li><a href='../tasks/main.php'><h3>Manage tasks</h3></a></li>";
+        echo "<li><a href='main.php'><h3>Manage members</h3></a></li>";
+        echo "</ul>";
         $tableToUse = "TeamMember";
     }
 
@@ -70,7 +71,7 @@ function loadInit($contentToLoad, $conn){
 
         if($contentToLoad == "task"){
             $query = "SELECT taskID, title FROM Task ORDER BY ecd";
-            echo "<form action='../tasks/viewtask.php' method='GET'>";
+            echo "<form action='../tasks/viewtask.php' method='POST'>";
             echo "<input type='hidden' name='taskSelect' value='1' />";
             foreach($conn->query($query) as $row){
                 echo "<input type='submit' name='" . $row['taskID'] . "' value='" . $row['title'] . "' />";

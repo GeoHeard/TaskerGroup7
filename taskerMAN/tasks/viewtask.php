@@ -1,6 +1,6 @@
 <?php
 // if we are here not by the user selecting a task, then go back to main
-if(!((isset($_GET['taskSelect'])) || isset($_GET['editMode']) )){
+if(!((isset($_POST['taskSelect'])))){
     header("Location: main.php");
 }
 ?>
@@ -8,6 +8,8 @@ if(!((isset($_GET['taskSelect'])) || isset($_GET['editMode']) )){
 <html lang="en">
 <head>
     <title>taskerMAN - View task</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic' rel='stylesheet' type='text/css'>
     <script>
         function checkDropdown(){
 
@@ -27,7 +29,7 @@ if(!((isset($_GET['taskSelect'])) || isset($_GET['editMode']) )){
 <?php
 require_once("../components/init.php");
 loadInit("task", $conn);
-$sth = $conn->prepare("SELECT title, memberEmail, startDate, ecd, status FROM Task WHERE taskID=" . array_keys($_GET)[1]);
+$sth = $conn->prepare("SELECT title, memberEmail, startDate, ecd, status FROM Task WHERE taskID=" . array_keys($_POST)[1]);
 $sth->execute();
 $currTask = $sth->fetch(PDO::FETCH_ASSOC);
 
@@ -39,11 +41,11 @@ $statusValues = ["allocated", "abandoned", "completed"];
         <h2><?php echo $currTask['title']; ?></h2>
     </div>
     <div id="mainBody">
-        <form id="newTaskForm" name="newTaskForm" onsubmit="return checkDrodown()" action="../components/processnew.php" method="GET">
+        <form id="newTaskForm" name="newTaskForm" onsubmit="return checkDrodown()" action="../components/processnew.php" method="POST">
             <fieldset>
                 <label for="taskTitle">Task title</label>
                 <?php
-                echo "<input type='text' id='taskTitle' name='taskTitle' value='" . $_GET[array_keys($_GET)[1]] . "' />";
+                echo "<input type='text' id='taskTitle' name='taskTitle' value='" . $_POST[array_keys($_POST)[1]] . "' />";
                 ?>
                 <br />
                 <label for="teamMember">Allocated team member</label>
