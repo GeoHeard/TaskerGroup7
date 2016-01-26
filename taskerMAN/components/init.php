@@ -21,29 +21,40 @@ function loadInit($contentToLoad, $conn){
     global $rootpath;
 
     echo "<header>";
-
+    echo '
+    <ul>
+    <li class="logo"><a href="../index.php"><h1>taskerMAN - Unicorn Edition</h1></a></li>
+    ';
 
     // May try and use absolute links in the future
 
     if ($contentToLoad == "default") {
-        echo "<a href='index.php'><h1>taskerMAN</h1></a>";
-        echo "<a href='tasks/main.php'><h3>Manage tasks</h3></a>";
-        echo "<a href='members/main.php'><h3>Manage members</h3></a>";
+        echo "
+
+        <li><a href='tasks/main.php'><h1>Manage tasks</h1></a></li>";
+        echo "
+        <li><a href='members/main.php'><h1>Manage members</h1></a><li>
+        </ul>";
     } else if ($contentToLoad == "task") {
         $buttonPath = "newtask.php";
-        echo "<a href='../index.php'><h1>taskerMAN</h1></a>";
-        echo "<a href='main.php'><h3>Manage tasks</h3></a>";
-        echo "<a href='../members/main.php'><h3>Manage members</h3></a>";
+        echo "
+        <ul>
+        <li><a href='main.php'><h3>Manage tasks</h3></a></li>";
+        echo "
+        <li><a href='../members/main.php'><h3>Manage members</h3></a></li>
+        </ul>";
         $tableToUse = "Task";
     } else if ($contentToLoad == "member") {
         $buttonPath = "newmember.php";
-        echo "<a href='../index.php'><h1>taskerMAN</h1></a>";
-        echo "<a href='../tasks/main.php'><h3>Manage tasks</h3></a>";
-        echo "<a href='main.php'><h3>Manage members</h3></a>";
+        echo "
+        <ul>
+        <li><a href='../tasks/main.php'><h3>Manage tasks</h3></a></li>";
+        echo "
+        <li><a href='main.php'><h3>Manage members</h3></a></li>
+        </ul>";
         $tableToUse = "TeamMember";
     }
 
-    echo "<hr />";
     echo "</header>";
 
     if ($contentToLoad != "default") {
