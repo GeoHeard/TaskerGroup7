@@ -12,6 +12,8 @@ require_once("../components/init.php");
 if (isset($_GET["filterTaskSubmit"])){
     if ($_GET["filterTaskSubmit"] == "Submit"){
         loadInit("task", $conn, [$_GET["taskStatusFilter"], $_GET["taskTeamMemberFilter"]]);
+    }else{
+        header("Location: ../index.php");
     }
 }else{
     loadInit("task", $conn);
@@ -31,11 +33,13 @@ if (isset($_GET["filterTaskSubmit"])){
                 <label for="taskTeamMemberFilter">Allocated team member</label>
                 <br />
                 <select name="taskStatusFilter" id="taskStatusFilter" onchange="checkDropdown()">
+                    <option value="any">any</option>
                     <option value="allocated">allocated</option>
                     <option value="abandoned">abandoned</option>
                     <option value="completed">completed</option>
                 </select>
                 <select name="taskTeamMemberFilter" id="taskTeamMemberFilter">
+                    <option value="any">any</option>
                     <?php require_once("../components/populateDropDown.php"); ?>
                 </select>
                 <br />

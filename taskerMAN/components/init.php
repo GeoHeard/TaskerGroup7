@@ -5,6 +5,9 @@ $username = "csgpadm_7";
 $password = "Tbart8to";
 $rootpath = "crb15/taskerMAN";
 
+// TURNS OFF ERROR REPORTING!
+error_reporting(0);
+
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
     // set the PDO error mode to exception
@@ -15,12 +18,38 @@ catch(PDOException $e)
 
 }
 
-function loadInit($contentToLoad, $conn, $filter = []){
+function loadInit($contentToLoad, $conn, $filter = null){
     $tableToUse = "";
     $buttonPath = "";
     global $rootpath;
 
-    print_r($filter);
+//    if($conn == null) {
+//        if($contentToLoad == "dberror") {
+//            echo "<ul>";
+//            echo "<li class='logo'><a href='index.php'><h1>taskerMAN</h1></a></li>";
+//            echo "<li><a href='tasks/main.php'><h1>Manage tasks</h1></a></li>";
+//            echo "<li><a href='members/main.php'><h1>Manage members</h1></a><li>";
+//            echo "</ul>";
+//            return;
+//        }else{
+//            header("Location: http://users.aber.ac.uk/crb15/taskerMAN/dberror.php");
+//        }
+//    }
+
+    if($contentToLoad == "dberror") {
+        if ($conn == null) {
+            echo "<ul>";
+            echo "<li class='logo'><a href='index.php'><h1>taskerMAN</h1></a></li>";
+            echo "<li><a href='tasks/main.php'><h1>Manage tasks</h1></a></li>";
+            echo "<li><a href='members/main.php'><h1>Manage members</h1></a><li>";
+            echo "</ul>";
+            return;
+        }else{
+            header("Location: http://users.aber.ac.uk/crb15/taskerMAN/index.php");
+        }
+    }else if ($conn == null){
+        header("Location: http://users.aber.ac.uk/crb15/taskerMAN/dberror.php");
+    }
 
     echo "<header>";
 
@@ -66,9 +95,22 @@ function loadInit($contentToLoad, $conn, $filter = []){
 
         $query = "";
 
-        if($conn != null){
             if($contentToLoad == "task"){
-                $query = "SELECT taskID, title FROM Task ORDER BY ecd";
+                $query = "SELECT taskID, title, status FROM Task";
+                if ($filter != null){
+                    if($filter[0] != "any" || $filter[1] != "any"){
+                        if($filter[0] != "any" && $filter[1] != "any"){
+                            $query .= " WHERE status='" . $filter[0] . "'";
+                            $query .= " AND memberEmail='" . $filter[1] . "'";
+                        }else if ($filter[0] == "any"){
+                            $query .= " WHERE memberEmail='" . $filter[1] . "'";
+                        }else if ($filter[1] == "any"){
+                            $query .= " WHERE status='" . $filter[0] . "'";
+                        }
+                    }
+                }
+                $query .= " ORDER BY ecd";
+                echo $query;
                 echo "<form action='viewtask.php' method='POST'>";
                 echo "<input type='hidden' name='taskSelect' value='1' />";
                 foreach($conn->query($query) as $row){
@@ -84,9 +126,6 @@ function loadInit($contentToLoad, $conn, $filter = []){
                 }
                 echo "</form>";
             }
-        }else{
-            header("Location: http://users.aber.ac.uk/crb15/taskerMAN/dberror.php");
-        }
 
         echo "</div>";
         echo "</nav>";
