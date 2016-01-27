@@ -18,7 +18,7 @@ loadInit("default", $conn);
         <fieldset>
             <legend>Please log in</legend>
             <label>Username</label>
-            <input type='text' id='loginFormUsername' onchange="verifyEmail(this.value)"/>
+            <input type='text' id='loginFormUsername' onchange="verifyEmail(this.value)" placeholder='email@website.com'/>
             <br />
             <label>Password</label>
             <input type='text' id='loginFormPassword' />
