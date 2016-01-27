@@ -3,8 +3,12 @@
 The tasker system is a method of creating and allocating tasks to users through a web client (TaskerMAN) web server (TaskerSVR) and a local client (TaskerCLI)
 
 PREREQUISITES
+
 Which Operating Systems will I be able to install taskerCLI on?
+
 taskerCLI should work on all common Operating Systems, including all tested versions of Microsoft Windows, Mac OS, and Linux that can run a Java virtual machine.
+
+
 
 Are there any required downloads for taskerCLI?
 taskerCli requires the JDBC driver, which is currently bundled with the .java file.
