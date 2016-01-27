@@ -18,7 +18,7 @@ loadInit("default", $conn);
         <fieldset>
             <legend>Please log in</legend>
             <label>Username</label>
-            <input type='text' id='loginFormUsername' />
+            <input type='text' id='loginFormUsername' onchange="verifyEmail(this.value)"/>
             <br />
             <label>Password</label>
             <input type='text' id='loginFormPassword' />
@@ -26,6 +26,13 @@ loadInit("default", $conn);
             <input type='submit' id='loginFormSubmit' value='Login' />
             </fieldset>
     </form>
+    <script>
+            //each function verifies if its field validates. Button cannot be pushed until all valid.
+            function verifyEmail(email)
+        {   email.toLowerCase();
+            email.trim();
+            if(email.match([a-z0-9]*[]))
+                }
 </main>
 
 </body>
