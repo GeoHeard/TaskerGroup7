@@ -65,3 +65,4 @@ HELP I CANNOT CONNECT!!
 You’re probably screwed.
 Contact your network administrator for more details.
 
+email: twd@aber.ac.uk for more information
