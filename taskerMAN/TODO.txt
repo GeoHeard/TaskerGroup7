@@ -1,0 +1,15 @@
+-On "http://users.aber.ac.uk/crb15/taskerMAN/members/main.php" once you select a team member, there should be a button
+to view their specific tasks
+
+-On "http://users.aber.ac.uk/crb15/taskerMAN/tasks/main.php" there should be an option to view task elements and comments
+
+-Remove password box //done on the tomdoff branch
+
+-validate login box //javascript and php
+
+-When you filter a task, e.g: http://users.aber.ac.uk/crb15/taskerMAN/tasks/filtertasks.php?taskStatusFilter=allocated&taskTeamMemberFilter=KiG%40tenaciousd.com&filterTaskSubmit=Submit
+    -and then select a task, the list of tasks unfilters. It would be nice if it continued to only show filtered tasks
+    
+-Create task and create task member still needs implementing
+
+-Client side and server side checking that "ecd" is not set in the past when creating a new task. 
