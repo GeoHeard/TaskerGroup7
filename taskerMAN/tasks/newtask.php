@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <title>taskerMAN - New task</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic' rel='stylesheet' type='text/css'>
     <script src="../components/validators/validateNewTask.js"></script>
     <script>
         document.getElementById("myRange").min;

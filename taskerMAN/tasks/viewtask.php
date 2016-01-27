@@ -13,10 +13,10 @@ if(!((isset($_POST['taskSelect'])))){
     <script>
         function checkDropdown(){
 
-            alert(document.getElementsByTagName("option")[document.getElementById("teamMember").selectedIndex].defaultSelected);
-            alert(document.getElementsByTagName("option")[document.getElementById("taskStatus").selectedIndex].defaultSelected);
+            var defaultTeamMemberSelected = document.getElementById('teamMember').options[document.getElementById('teamMember').selectedIndex].defaultSelected;
+            var defaultStatusSelected = document.getElementById('taskStatus').options[document.getElementById('taskStatus').selectedIndex].defaultSelected;
 
-            if(document.getElementsByTagName("option")[document.getElementById("teamMember").selectedIndex].defaultSelected && document.getElementsByTagName("option")[document.getElementById("taskStatus").selectedIndex].defaultSelected){
+            if(defaultTeamMemberSelected && defaultStatusSelected){
                 document.getElementById("toggledButton").disabled = true;
             }else{
                 document.getElementById("toggledButton").disabled = false;
@@ -41,11 +41,11 @@ $statusValues = ["allocated", "abandoned", "completed"];
         <h2><?php echo $currTask['title']; ?></h2>
     </div>
     <div id="mainBody">
-        <form id="newTaskForm" name="newTaskForm" onsubmit="return checkDrodown()" action="../components/processnew.php" method="POST">
+        <form id="viewTaskForm" name="viewTaskForm" onsubmit="return checkDrodown()" action="../components/processnew.php" method="POST">
             <fieldset>
                 <label for="taskTitle">Task title</label>
                 <?php
-                echo "<input type='text' id='taskTitle' name='taskTitle' value='" . $_POST[array_keys($_POST)[1]] . "' />";
+                echo "<input type='text' id='taskTitle' name='taskTitle' value='" . $_POST[array_keys($_POST)[1]] . "' disabled/>";
                 ?>
                 <br />
                 <label for="teamMember">Allocated team member</label>
@@ -66,12 +66,12 @@ $statusValues = ["allocated", "abandoned", "completed"];
                 <br />
                 <label for="startDate">Start date</label>
                 <?php
-                echo "<input type='date' id='startDate' name='startDate' value='" . $currTask['startDate'] . "'/>";
+                echo "<input type='date' id='startDate' name='startDate' value='" . $currTask['startDate'] . "' disabled/>";
                 ?>
                 <br />
                 <label for="expectedCompletionDate">Expected completion date</label>
                 <?php
-                echo "<input type='date' id='expectedCompletionDate' name='expectedCompletionDate' value='" . $currTask['ecd'] . "'/>";
+                echo "<input type='date' id='expectedCompletionDate' name='expectedCompletionDate' value='" . $currTask['ecd'] . "' disabled/>";
                 ?>
                 <br />
                 <label for="taskStatus">Status</label>

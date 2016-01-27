@@ -9,17 +9,12 @@
 
 <?php
 require_once("../components/init.php");
-if(isset($_GET['refineSubmit'])){
-    loadInit("member", $conn);
-}else{
-    loadInit("member", $conn);
-}
-
+loadInit("member", $conn);
 ?>
 
 <main>
     <div id="mainTop">
-        <h2>Filter tasks</h2>
+        <h2>Manage members</h2>
     </div>
     <div id="mainBody">
 

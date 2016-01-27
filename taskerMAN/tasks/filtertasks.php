@@ -2,37 +2,46 @@
 <html lang="en">
 <head>
     <title>taskerMAN - Filter tasks</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic' rel='stylesheet' type='text/css'>
 </head>
 <body>
 
 <?php
 require_once("../components/init.php");
-loadInit("task", $conn);
+if (isset($_GET["filterTaskSubmit"])){
+    if ($_GET["filterTaskSubmit"] == "Submit"){
+        loadInit("task", $conn, [$_GET["taskStatusFilter"], $_GET["taskTeamMemberFilter"]]);
+    }
+}else{
+    loadInit("task", $conn);
+}
+
 ?>
 
 <main>
     <div id="mainTop">
-        <h2>Manage tasks</h2>
+        <h2>Filter tasks</h2>
     </div>
     <div id="mainBody">
-        <form id="filterTasksForm" name="newTasksForm" action="../components/processfilter.php" method="POST">
+        <form id="filterTasksForm" name="filterTasksForm" action="" method="GET">
             <fieldset>
-                <label for="taskStatus">Task title</label>
-                <input type="text" id="taskTitle" name="taskTitle" />
+                <legend>Filter by</legend>
+                <label for="taskStatusFilter">Task status</label>
+                <label for="taskTeamMemberFilter">Allocated team member</label>
                 <br />
-                <label for="teamMember">Allocated team member</label>
-                <?php
-                require("../components/populateDropDown.php");
-                ?>
+                <select name="taskStatusFilter" id="taskStatusFilter" onchange="checkDropdown()">
+                    <option value="allocated">allocated</option>
+                    <option value="abandoned">abandoned</option>
+                    <option value="completed">completed</option>
+                </select>
+                <select name="taskTeamMemberFilter" id="taskTeamMemberFilter">
+                    <?php require_once("../components/populateDropDown.php"); ?>
+                </select>
                 <br />
-                <label for="startDate">Start date</label>
-                <input type="date" id="startDate" name="startDate" onclick="setMin()" />
-                <br />
-                <label for="completionDate">Expected completion date</label>
-                <input type="date" id="completionDate" name="completionDate" />
                 <hr />
-                <input type="submit" name="newTaskSubmit" value="Create" />
-                <input type="submit" name="newTaskSubmit" value="Cancel" />
+                <input type="submit" name="filterTaskSubmit" value="Submit" />
+                <input type="submit" name="filterTaskSubmit" value="Cancel" />
             </fieldset>
         </form>
     </div>
