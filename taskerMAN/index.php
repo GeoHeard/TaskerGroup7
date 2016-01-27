@@ -20,9 +20,7 @@ loadInit("default", $conn);
             <label>Username</label>
             <input type='text' id='loginFormUsername' />
             <br />
-            <label>Password</label>
-            <input type='text' id='loginFormPassword' />
-            <br />
+            <!-- Removed the password box becuase we're not using a password. -->
             <input type='submit' id='loginFormSubmit' value='Login' />
             </fieldset>
     </form>
