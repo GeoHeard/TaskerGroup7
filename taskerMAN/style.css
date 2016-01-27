@@ -4,6 +4,9 @@
 html{
     height: 100%;
 }
+* {
+    margin: 0px;
+}
 body{
     background-color: #9a9a9a;
     height: 100%;
