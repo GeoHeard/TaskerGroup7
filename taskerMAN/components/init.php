@@ -27,8 +27,11 @@ function loadInit($contentToLoad, $conn, $filter = []){
     if ($contentToLoad == "default") {
         echo "<ul>";
         echo "<li class='logo'><a href='index.php'><h1>taskerMAN</h1></a></li>";
+        if(ISSET($POST['Login'])) //shouldn't be able to access the manage sections without loggin in.
+        {
         echo "<li><a href='tasks/main.php'><h1>Manage tasks</h1></a></li>";
         echo "<li><a href='members/main.php'><h1>Manage members</h1></a><li>";
+        }
         echo "</ul>";
     } else if ($contentToLoad == "task") {
         $buttonPath = "newtask.php";
