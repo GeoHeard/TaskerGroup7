@@ -1,24 +1,44 @@
 *{
     font-family: 'Roboto', sans-serif;
 }
+
 html{
     height: 100%;
 }
-* {
-    margin: 0px;
-}
+
 body{
     background-color: #9a9a9a;
     height: 100%;
 }
 
+header{
+    
+}
+
 main{
     position: relative;
-    margin: 0;
+    margin-top: -20px;
     background-color: #333;
     color: white;
     height: 50%;
     width: 100%;
+}
+
+#navTop{
+    float:left;
+    width: 20%;
+}
+
+#navBody{
+    float: left;
+    width: 20%;
+}
+#mainBody{
+    float: right;
+}
+
+#mainTop{
+    float: right;
 }
 
 .Login{
@@ -77,3 +97,5 @@ Needs to be implemented
 .logo {
     float: left;
 }
+
+
