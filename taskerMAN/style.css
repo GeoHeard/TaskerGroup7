@@ -1,28 +1,93 @@
 *{
     font-family: 'Roboto', sans-serif;
 }
+
 html{
     height: 100%;
 }
+
 body{
     background-color: #9a9a9a;
     height: 100%;
 }
 
+header{
+    
+}
+
 main{
-    position: relative;
-    margin: 0;
     background-color: #333;
+    margin-top: -20px;
     color: white;
-    height: 50%;
+    height: 100%;
     width: 100%;
+}
+
+#navTop{
+    float:left;
+    width: 20%;
+    height: 30px;
+    background-color: #333;
+}
+
+#navBody{
+    float: left;
+    width: 20%;
+    height: 20%;
+    background-color: #333;
+    clear: both;
+    overflow-y:auto;
+}
+
+.submitButton{
+    text-align: left;
+    -webkit-transition: 0.3s ease-in-out;
+    -moz-transition: 0.3s ease-in-out;
+    -ms-transition: 0.3s ease-in-out;
+    -o-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+    text-decoration: none;
+    padding: 1px 1px;
+    color: white;
+    display:block;
+    background-color: #333;
+    color: #fff;
+    font-family: 'font-family: 'Roboto', sans-serif;';
+    font-size: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    border:none;
+    width: 100%;
+    white-space: normal;
+}
+
+.submitButton:hover{
+    background-color: #111;
+}
+
+#mainBody{
+    background-color: #333;
+    float: left;
+    width: 80%;
+}
+
+#mainTop{
+    float: left;
+    width; 80%;
+    background-color: #333;
+
 }
 
 .Login{
     margin: auto;
-    width: auto;
+    width:50%;
+    border: 3px solid #9a9a9a;
     padding: 10px;
     height: 50%;
+}
+
+#loginForm{
+    
 }
 
 a{
@@ -39,7 +104,6 @@ ul {
 }
 
 li {
-    font-size: 9pt;
     float: right;
     vertical-align: middle;
     display: block;
@@ -58,12 +122,11 @@ li a {
     display: block;
     padding: 1px 1px;
     color: white;
-    border-bottom: 2px solid teal;
 }
 
 /* Change the link color to #111 (black) on hover */
 li a:hover {
-    background-color: teal;
+    background-color: #111;
 }
 
 /*Shows which link is currently active
@@ -76,36 +139,4 @@ Needs to be implemented
     float: left;
 }
 
-.logo a{
-    
-}
-
-.Buttons{
-    float: right;
-    vertical-align: middle;
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 5px 8px; 
-}
-
-.Buttons a{
-    -webkit-transition: 0.3s ease-in-out;
-    -moz-transition: 0.3s ease-in-out;
-    -ms-transition: 0.3s ease-in-out;
-    -o-transition: 0.3s ease-in-out;
-    transition: 0.3s ease-in-out;
-    text-decoration: none;
-    display: block;
-    padding: 1px 1px;
-    color: white;
-}
-
-.Buttons a:hover{
-    background-color: teal;
-}
-
-fieldset{
-    padding: 1em;
-}
 
