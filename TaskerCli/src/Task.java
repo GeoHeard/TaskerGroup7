@@ -1,11 +1,25 @@
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.io.PrintWriter;
-import java.util.Scanner;
+
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 /**
  * 
  * Stores all of the information for the task. Provides a function
  * to load a JPanel for this object into the GUI so that it can be
- * viewed and edited. The JPanel can call ‘updateTask’ to read in 
+ * viewed and edited. The JPanel can call ï¿½updateTaskï¿½ to read in 
  * any input information from the GUI and store it in the relevant 
  * variables. After any changes are made, the task can interact 
  * with TaskerCli to call saveChanges.
@@ -19,6 +33,7 @@ public class Task {
 	//Allows us to communicate with the main program and save changes.
 	private TaskerCli tasker;
 	
+	private int taskID;
 	private String title;
 	private String email;
 	
@@ -38,6 +53,8 @@ public class Task {
 	
 	/**
 	 * Creates a new task that stores the input arguments, and a reference to mainProgram.
+	 * @param ID
+	 * 			The tasks unique ID as found in the database
 	 * @param newName
 	 * 			The name of the task
 	 * @param newEmail
@@ -55,7 +72,8 @@ public class Task {
 	 * @param mainProgram
 	 * 			The current instance of TaskerCli
 	 */
-	public Task(String newTitle, String newEmail,/* Date start, Date end,*/ Status newStatus, String[] newElements, String[] newComments, TaskerCli mainProgram){
+	public Task(int ID, String newTitle, String newEmail,/* Date start, Date end,*/ Status newStatus, String[] newElements, String[] newComments, TaskerCli mainProgram){
+		taskID = ID;
 		title = newTitle;
 		email = newEmail;
 		//startDate = start;
@@ -67,77 +85,18 @@ public class Task {
 	}
 	
 	/**
-	 * 	Create a new JPanel for this task and load it onto the main
-	 *  screen GUI.
-	 *  
-	 *  Currently loads a text interface for the prototype
+	 * 	Create a new JPanel for this task returns it
+	 *  @return TaskPanel
+	 *  			The panel displaying the info for this task
 	 */
-	public void initialiseTaskPanel(){
-		Scanner in = new Scanner(System.in);
-		String choice;
-		
-		//print task info
-		System.out.println("");
-		System.out.println("Task: " + title);
-		/*Print start date*/
-		/*Print completion data*/
-		System.out.println("Task status: " + status);
-		System.out.println("");
-		
-		//Print out the task elements and their comments
-		for(int i = 0; i < elements.length; i++ ){
-			System.out.println("Step " + i + ": " + elements[i]);
-			System.out.println("Your comment: " + comments[i]);
-		}
-		System.out.println("");
-
-		//Give the user options
-		choice = "";
-		while(!choice.equals("b")){
-			System.out.println("Please enter the number of the step you want to edit the comment of, ");
-			System.out.println("or 'f' to change task to completed or 'b' to go back to the previous menu: ");
-			
-			choice = in.nextLine();
-			
-			//If the choice is one of the comments
-			for(int i = 0; i < comments.length; i++){
-				if(choice.equals(Integer.toString(i))){
-					String newComment;
-					
-					//Ask them to input a new comment to replace the old
-					System.out.println("Please enter a new comment for this step: ");
-					newComment = in.nextLine();
-					
-					//Updaye the task to add this new comment
-					comments[i] = newComment;
-					updateTask(this.comments, this.status);
-					choice = "b";
-				}
-			}
-			
-			//If the choice is to mark task as complete
-			if(choice.equals("f")){
-				updateTask(this.comments, Status.COMPLETE);
-				choice = "b";
-			}
-		}
-		
-		hideTaskPanel();
-		in.close();
-	}
-	
-	/**
-	 * Get rid of the tasks JPanel from the GUI.
-	 * 
-	 * Currently just loads taskerCli text interface for prototype
-	 */
-	public void hideTaskPanel(){
-		tasker.initialiseMainScreen();
+	public JPanel initialiseTaskPanel(){
+		JPanel thePanel = new TaskPanel(this);
+		return thePanel;
 	}
 	
 	/**
 	 * 
-	 * Called by the ‘save changes’ button on the GUI. Saves whatever 
+	 * Called by the ï¿½save changesï¿½ button on the GUI. Saves whatever 
 	 * values are in the input boxes into the corresponding variables, 
 	 * it then calls TaskerCli.saveChanges() so that the tasks are 
 	 * synchronised.
@@ -152,6 +111,17 @@ public class Task {
 		comments = newComments;
 		status = newStatus;
 		tasker.saveChanges();
+		
+		//NOW WE NEED A WAY TO REFRESH THE JMENU IF A TASK HAS BEEN MARKED COMPLETE
+		//ALSO APPLIES TO IF THERE HAS BEEN A SYNCHRONISATION
+		//WHAT IF THE CURRENT TASK BEING EDITED IS MARKED AS COMPLETE OR ABANDONED?
+	}
+	
+	/**
+	 * 
+	 */
+	private void cancleChanges(){
+		tasker.cancelChanges();
 	}
 	
 	/**
@@ -161,6 +131,7 @@ public class Task {
 	 */
 	public void saveInfo(PrintWriter pw){
 		//Print the general task information
+		pw.println(taskID);
 		pw.println(title);
 		pw.println(status);
 		//pw.println(start);
@@ -168,11 +139,16 @@ public class Task {
 		
 		//print the number of task elements
 		pw.println(elements.length);
+		
 		//loop and print each task element and comment
 		for(int i = 0; i < elements.length; i++){
 			pw.println(elements[i]);
 			pw.println(comments[i]);
 		}
+	}
+	
+	public int getID(){
+		return taskID;
 	}
 	
 	public String getTitle(){
@@ -181,5 +157,221 @@ public class Task {
 	
 	public Status getStatus(){
 		return status;
+	}
+	
+	public String[] getElements(){
+		return elements;
+	}
+	
+	public String[] getComments(){
+		return comments;
+	}
+	
+	/**
+	 * if both objects are of type Task and have the same ID
+	 * they are seen as equal.
+	 */
+	@Override public boolean equals(Object other) {
+	    boolean result = false;
+	    
+	    if(other instanceof Task){
+	    	if(((Task) other).getID() == taskID){
+	    		result = true;
+	    	}
+	    }
+	    return result;
+	}
+	
+	/* *******************************************************************************
+	 * 							END OF MAIN CLASS 'Task'				     	 *
+	 * 						 START OF INNER CLASS 'TaskPanel'					 *
+	 * *******************************************************************************/
+	
+	
+	/**
+	 * This class provides a JPanel that displays a single task.
+	 * The Jpanel has text boxes for input of comments and a button
+	 * for committing a change to a task.
+	 * @author kuh1
+	 */
+	private class TaskPanel extends JPanel{
+		private Task task;
+		private JCheckBox isComplete;
+		//These text input boxes will store the users comments
+		private JTextArea[] jComments;
+		
+		/**
+		 * Creates a new task panel
+		 * @param theTask
+		 * 			The task which needs to be displayed on screen
+		 */
+		TaskPanel(Task theTask){
+			super();
+			
+			task = theTask;
+			
+			//Set the layout of the panel and populate it
+			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+			setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, this.getBackground()));
+			populatePanel(task);
+			
+			//Make sure it is visible
+			setVisible(true); 
+		}
+		
+		/**
+		 * 
+		 * @param theTask
+		 */
+		private void populatePanel(Task theTask){
+			//Add the title
+          	JSLabel title = new JSLabel(theTask.getTitle(), "Arial", Font.BOLD, 18);
+          	add(title);
+          	       	
+          	//Add the title
+          	JSLabel startDate = new JSLabel("Start Date: ", "Arial", Font.PLAIN, 16);
+          	add(startDate);
+          	
+          	//Add the title
+          	JSLabel endDate = new JSLabel("Expected Completion Date: ", "Arial", Font.PLAIN, 16);
+          	add(endDate);
+          	
+            //Add the list of task elements and task comments after a space
+          	add(Box.createRigidArea(new Dimension(0,10)));
+          	//Add the sub title
+			JSLabel subTitle = new JSLabel("Task Details", "Arial", Font.BOLD, 16);
+          	subTitle.setAlignmentX(LEFT_ALIGNMENT);
+          	add(subTitle);
+          	add(createElementList(theTask));
+          	
+          	//Add the checkbox asking if the user wants to mark the task as complete after a space
+          	add(Box.createRigidArea(new Dimension(0,10)));
+          	add(createCompleteBox());
+          	
+          	//Add the two buttons
+          	add(createButtons());
+          	//Add padding below this element
+            add(Box.createVerticalGlue());
+		}
+		
+		/**
+		 * Creates a JPanel attatched to a JScrollPane that contains a list:
+		 * JLabel followed by JTextArea for each task element and element comment.
+		 * @param theTask
+		 * 			The task we want to display the elements/comments ofs
+		 * @return
+		 * 			A JScrollPane containing the above described JPanel
+		 */
+		private JScrollPane createElementList(Task theTask){
+			//Make a panel with vertical grid layout
+			JPanel theList = new JPanel();
+			theList.setLayout(new GridLayout(0,1)); 
+			
+          	//Stores the elements and comments found in the task
+			String[] elements = theTask.getElements();
+			String[] comments = theTask.getComments();
+			
+			//An array of labels, one for each element
+			JLabel[] jElements = new JLabel[elements.length];
+			//An array of input boxes, one for each comment
+			jComments = new JTextArea[elements.length];
+			
+			//Loop for each comment/element
+			for(int i = 0; i < elements.length; i ++){
+				//Create the JComponents
+				jElements[i] = new JLabel();
+				jComments[i] = new JTextArea();
+				//Set the corresponding text
+				jElements[i].setText(elements[i]);
+				jComments[i].setText(comments[i]);
+				//Add them to the panel
+				theList.add(jElements[i]);
+				theList.add(jComments[i]);
+			}
+			
+			JScrollPane scrollPane = new JScrollPane(theList);
+			scrollPane.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, this.getBackground()));
+			
+			return scrollPane;
+		}
+		
+		/**
+		 * Creates a panel with a label and checkbox in line asking if the user
+		 * wants to mark the task as completed
+		 * @return
+		 * 		A panel containing the two components in line
+		 */
+		private JPanel createCompleteBox(){
+			JPanel panel = new JPanel();
+			
+			//Add the question
+          	JSLabel question = new JSLabel("Task Completed?: ", "Arial", Font.PLAIN, 16);
+          	panel.add(question);
+          	
+          	//Add the checkbox
+          	isComplete = new JCheckBox();
+          	panel.add(isComplete);
+			
+			return panel;
+		}
+		
+		/**
+		 * Creates a panel with two buttons, one to save changes and one to cancel changes.
+		 * @return
+		 * 		A panel containing the two buttons
+		 */
+		private JPanel createButtons(){
+			JPanel panel = new JPanel();
+			
+			panel.add(createSaveBtn());
+			panel.add(createCancelBtn());
+			
+			return panel;
+		}
+		
+		 /**
+	        * Creates the button the user will press to login
+	        * @return 
+	        */
+	        private JButton createSaveBtn(){
+	            //Create a new button and define its behaviour
+	        	JButton saveBtn = new JButton(new AbstractAction("Save changes") {
+	        		public void actionPerformed(ActionEvent ae) {
+	        			//We need to store the information contained on the JPanel
+	        			String[] newComments = new String[jComments.length];
+	        			Status newStatus = task.getStatus();
+	        			
+	        			//Loop through each JTextArea
+	        			for(int i = 0; i < jComments.length; i++){
+	        				//Capture the input
+	        				newComments[i] = jComments[i].getText();
+	        			}
+	        			
+	        			if(isComplete.isSelected()){
+	        				newStatus = Status.COMPLETED;
+	        			}
+	        			
+	        			task.updateTask(newComments, newStatus);
+	        		}
+	        	});
+	                   
+	        	return saveBtn;
+	        }
+	        
+	        /**
+	         * Creates the button the user will press to login
+	         * @return 
+	         */
+	         private JButton createCancelBtn(){
+	             //Create a new button and define its behaviour
+	         	JButton cancleBtn = new JButton(new AbstractAction("Cancel changes") {
+	         		public void actionPerformed(ActionEvent ae) {
+	         			//Basically could just ask to reload this task panel as it will reset all changes
+	         			task.cancleChanges();
+	         		}
+	         	});
+	                    
+	         	return cancleBtn;
+	         }
 	}
 }

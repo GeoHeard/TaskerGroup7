@@ -1,16 +1,58 @@
 kuh1@aber.ac.uk
-2
-Make cake
-COMPLETE
-2
-break eggs
-Done
-rub on nipples
-Done Sir
-Make taskerCli
-ALLOCATED
-2
-Open laptop
-How?
-Slam face into keyboard
-Done
+13
+3
+Create taskerCLI
+abandoned
+0
+7
+Finish Client
+allocated
+0
+8
+walk dog
+completed
+0
+9
+feed cat
+allocated
+0
+10
+do laundry
+allocated
+0
+11
+iron shirts
+allocated
+0
+12
+bake a cake
+allocated
+1
+add eggs
+FINE!!!
+13
+write a song
+allocated
+0
+14
+save the world
+allocated
+1
+buy a cape
+ok!!
+15
+make coffee
+allocated
+0
+16
+drink coffee
+allocated
+0
+17
+order pizza
+allocated
+0
+18
+order eat pizza
+allocated
+0
