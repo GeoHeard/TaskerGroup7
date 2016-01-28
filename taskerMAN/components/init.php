@@ -1,25 +1,27 @@
 <?php
-//$servername = "db.dcs.aber.ac.uk";
-//$dbName = "csgp_7_15_16";
-//$username = "csgpadm_7";
-//$password = "Tbart8to";
-//
-//// TURNS OFF ERROR REPORTING!
-//error_reporting(0);
-//
-//try {
-//    $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
-//    // set the PDO error mode to exception
-//    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//}
-//catch(PDOException $e)
-//{
-//
-//}
+$servername = "db.dcs.aber.ac.uk";
+$dbName = "csgp_7_15_16";
+$username = "csgpadm_7";
+$password = "Tbart8to";
+$rootpath = "crb15/taskerMAN";
+
+// TURNS OFF ERROR REPORTING!
+error_reporting(0);
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}
+catch(PDOException $e)
+{
+
+}
 
 function loadInit($contentToLoad, $conn, $filter = null){
     $tableToUse = "";
     $buttonPath = "";
+    global $rootpath;
 
 //    if($conn == null) {
 //        if($contentToLoad == "dberror") {
@@ -112,7 +114,7 @@ function loadInit($contentToLoad, $conn, $filter = null){
                 echo "<form action='viewtask.php' method='POST'>";
                 echo "<input type='hidden' name='taskSelect' value='1' />";
                 foreach($conn->query($query) as $row){
-                    echo "<input type='submit' name='" . $row['taskID'] . "' value='" . $row['title'] . "' />";
+                    echo "<input type='submit' class='submitButton' name='" . $row['taskID'] . "' value='" . $row['title'] . "' />";
                 }
                 echo "</form>";
             }else if ($contentToLoad == "member"){
@@ -120,7 +122,7 @@ function loadInit($contentToLoad, $conn, $filter = null){
                 echo "<form action='viewmember.php' method='POST'>";
                 echo "<input type='hidden' name='memberSelect' value='1' />";
                 foreach($conn->query($query) as $row){
-                    echo "<input type='submit' name='" . $row['email'] . "' value='" . $row['lastName'] . ", " . $row['firstName'] . "' />";
+                    echo "<input type='submit' class='submitButton' name='" . $row['email'] . "' value='" . $row['lastName'] . ", " . $row['firstName'] . "' />";
                 }
                 echo "</form>";
             }
