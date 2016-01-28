@@ -8,6 +8,7 @@
 <body>
 
 <?php
+require_once("../components/dbconnect.php");
 require_once("../components/init.php");
 if (isset($_GET["filterTaskSubmit"])){
     if ($_GET["filterTaskSubmit"] == "Submit"){

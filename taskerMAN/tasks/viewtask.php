@@ -27,6 +27,7 @@ if(!((isset($_POST['taskSelect'])))){
 <body>
 
 <?php
+require_once("../components/dbconnect.php");
 require_once("../components/init.php");
 loadInit("task", $conn);
 $sth = $conn->prepare("SELECT title, memberEmail, startDate, ecd, status FROM Task WHERE taskID=" . array_keys($_POST)[1]);
