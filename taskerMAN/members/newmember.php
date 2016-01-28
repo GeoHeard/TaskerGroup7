@@ -6,24 +6,28 @@ $memberEmailError = "";
 
 if(!empty($_GET['newMemberSubmit'])) {//if submitted, then validate
 
-//    if(isset($_GET['newMemberSubmit']) == "Cancel"){
-//        header("Location: ../index.php");
-//    }
+    if ($_GET['newMemberSubmit'] == "Cancel"){
+        header("Location: ../index.php");
+    }
 
     require_once("../components/validators/validateMemberDetails.php");
+
+    if ($stmt->rowCount() != 0){
+        $memberEmailError = "An existing member with this email already exists";
+        $error = true;
+    }
 
     if(!$error){
         //Validation Success!
         //Do form processing like email, database etc here
 
         try {
-            $sql = "INSERT INTO TeamMember VALUES ('$memberLastName', '$memberFirstName', '$memberEmail');";
+            $sql = "INSERT INTO TeamMember VALUES ('$memberFirstName', '$memberLastName', '$memberEmail');";
             $sth = $conn->query($sql);
         } catch(PDOException $e) {
             echo $e->getMessage();
         }
     }
-
 }
 ?>
 
@@ -51,7 +55,7 @@ header("refresh:300;url=../timeout.php");
         <form id="newMemberForm" name="newMemberForm" action="?" method="GET">
             <fieldset>
                 <label for="memberLastName">Last name</label>
-                <input type="text" id="memberLastName" name="memberLastName" max="64" value="<?php echo htmlentities($memberLastName); ?>"/>
+                <input type="text" id="memberLastName" name="memberLastName" max="64" value="<?php echo htmlentities($memberLastName); ?>" />
                 <span class='error'><?php echo $memberLastNameError ?></span>
                 <br />
                 <label for="memberFirstName">First name</label>

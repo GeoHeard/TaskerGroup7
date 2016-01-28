@@ -35,9 +35,6 @@ if(empty($memberEmail)) {
 } else if ($memberEmail != filter_var($memberEmail, FILTER_VALIDATE_EMAIL)){
     $memberEmailError = "Email is not valid";
     $error = true;
-} else if ($stmt->rowCount() != 0){
-    $memberEmailError = "An existing member with this email already exists";
-    $error = true;
 }
 //if(!$error){
 //    //Validation Success!

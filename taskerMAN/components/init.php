@@ -108,11 +108,10 @@ function loadInit($contentToLoad, $conn, $filter = null){
                     }
                 }
                 $query .= " ORDER BY ecd";
-                echo $query;
                 echo "<form action='viewtask.php' method='POST'>";
                 echo "<input type='hidden' name='taskSelect' value='1' />";
                 foreach($conn->query($query) as $row){
-                    echo "<input type='submit' name='" . $row['taskID'] . "' value='" . $row['title'] . "' />";
+                    echo "<input type='submit' class='submitButton' name='" . $row['taskID'] . "' value='" . $row['title'] . "' />";
                 }
                 echo "</form>";
             }else if ($contentToLoad == "member"){
@@ -120,7 +119,7 @@ function loadInit($contentToLoad, $conn, $filter = null){
                 echo "<form action='viewmember.php' method='POST'>";
                 echo "<input type='hidden' name='memberSelect' value='1' />";
                 foreach($conn->query($query) as $row){
-                    echo "<input type='submit' name='" . $row['email'] . "' value='" . $row['lastName'] . ", " . $row['firstName'] . "' />";
+                    echo "<input type='submit' class='submitButton' name='" . $row['email'] . "' value='" . $row['lastName'] . ", " . $row['firstName'] . "' />";
                 }
                 echo "</form>";
             }

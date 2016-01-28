@@ -1,24 +1,34 @@
 <?php
 require_once("../components/dbconnect.php");
-$lastNameError = "";
-$firstNameError = "";
-$memberEmailError = "";
+$taskTitleError = "";
+$taskStartDateError = "";
+$taskCompletionDateError = "";
 
-if(!empty($_GET['newMemberSubmit'])) {//if submitted, then validate
+$elements = preg_split('/\r\n|[\r\n]/', $_GET['taskElements']);
 
-//    if(isset($_GET['newMemberSubmit']) == "Cancel"){
-//        header("Location: ../index.php");
-//    }
+if(!empty($_GET['newTaskSubmit'])) {//if submitted, then validate
 
-    require_once("../components/validators/validateMemberDetails.php");
+    if($_GET['newTaskSubmit'] == "Cancel"){
+        header("Location: ../index.php");
+    }
+
+    require_once("../components/validators/validateTaskDetails.php");
 
     if(!$error){
         //Validation Success!
         //Do form processing like email, database etc here
-
         try {
-            $sql = "INSERT INTO TeamMember VALUES ('$memberLastName', '$memberFirstName', '$memberEmail');";
-            $sth = $conn->query($sql);
+            $sql = "INSERT INTO Task (title, memberEmail, startDate, ecd) VALUES ('$taskTitle', '". $_GET['taskTeamMember'] . "', '$taskStartDate', '$taskCompletionDate');";
+            $conn->exec($sql);
+            $last_id = $conn->lastInsertId();
+            foreach($elements as $element){
+                if ($element != ""){
+                    $sql = "INSERT INTO TaskElement (taskID, description) VALUES ('$last_id', '$element');";
+                    $conn->exec($sql);
+                }
+            }
+            header("Location: ../actionsuccess.php");
+
         } catch(PDOException $e) {
             echo $e->getMessage();
         }
@@ -36,9 +46,8 @@ if(!empty($_GET['newMemberSubmit'])) {//if submitted, then validate
     <script src="../components/validators/validateNewTask.js"></script>
     <script>
         function setMin(){
-            document.getElementById("completionDate").disabled = false;
-            document.getElementById("completionDate").value = document.getElementById("startDate").value;
-            document.getElementById("completionDate").min = document.getElementById("startDate").value;
+            document.getElementById("taskCompletionDate").value = document.getElementById("taskStartDate").value;
+            document.getElementById("taskCompletionDate").min = document.getElementById("taskStartDate").value;
         }
     </script>
 </head>
@@ -56,23 +65,25 @@ header("refresh:300;url=../timeout.php");
         <h2>New task</h2>
     </div>
     <div id="mainBody">
-        <form id="newTaskForm" name="newTaskForm" action="?" method="POST">
+        <form id="newTaskForm" name="newTaskForm" action="?" method="GET">
             <fieldset>
                 <label for="taskTitle">Task title</label>
-                <input type="text" id="taskTitle" name="taskTitle" />
+                <input type="text" id="taskTitle" name="taskTitle" max="64" value="<?php echo htmlentities($taskTitle); ?>" />
+                <span class='error'><?php echo $taskTitleError ?></span>
                 <br />
-                <label for="teamMember">Allocated team member</label>
+                <label for="taskTeamMember">Allocated team member</label>
                 <select name="taskTeamMember">
                     <?php require("../components/populateDropDown.php"); ?>
                 </select>
                 <br />
-                <label for="startDate">Start date</label>
-                <input type="date" id="startDate" name="startDate" min="<?php echo date("Y-m-d") ?>" onchange="setMin()" />
+                <label for="taskStartDate">Start date</label>
+                <input type="date" id="taskStartDate" name="taskStartDate" min="<?php echo date("Y-m-d") ?>" onchange="setMin()" max="64" value="<?php echo htmlentities($taskStartDate); ?>"  />
+                <span class='error'><?php echo $taskStartDateError ?></span>
                 <br />
-                <label for="completionDate">Expected completion date</label>
-                <input type="date" id="completionDate" name="completionDate" disabled/>
+                <label for="taskCompletionDate">Expected completion date</label>
+                <input type="date" id="taskCompletionDate" name="taskCompletionDate" max="64" value="<?php echo htmlentities($taskCompletionDate); ?>" />
+                <span class='error'><?php echo $taskCompletionDateError ?></span>
                 <br />
-
                 <hr />
                 <input type="submit" name="newTaskSubmit" value="Create" />
                 <input type="submit" name="newTaskSubmit" value="Cancel" />

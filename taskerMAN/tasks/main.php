@@ -18,7 +18,7 @@ loadInit("task", $conn);
         <h2>Manage tasks</h2>
     </div>
     <div id="mainBody">
-
+        <p><?php echo $sitemessage; ?></p>
     </div>
 </main>
 
