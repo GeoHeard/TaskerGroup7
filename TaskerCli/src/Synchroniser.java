@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.sql.*;
 
 /**
  * 
@@ -54,22 +55,55 @@ public class Synchroniser {
 	 * 		stored locally or online
 	 * @throws InvalidEmailException: No task or user data locally or online.
 	 */
-	public ArrayList<Task> synchroniseTasks(ArrayList<Task> currentTasks)/*throws ...*/{
+	public ArrayList<Task> synchroniseTasks(ArrayList<Task> offlineTasks)/*throws ...*/{
+		//Contains the list of synchronised tasks
 		ArrayList<Task> correctTasks = new ArrayList<Task>();
-		
 		//Attempt to make contact with the server
-		correctTasks = retrieveFromSever();
-		
+		ArrayList<Task> onlineTasks = retrieveFromSever(employeeEmail);	
 		//If we could contact the database
-		if(correctTasks != null){
-			
-			//Sync code e.g. local updates have priority
 		
+		if(onlineTasks != null){
+			if(offlineTasks != null){
+			//^^IF we have 2 lists of tasks, one offline one online
+				
+				//Loop through each retrieved task
+				for(int i = 0; i < onlineTasks.size(); i++){
+					Task onlineTask = onlineTasks.get(i);
+					
+					//If the task in question appears in the offline list also
+					if(offlineTasks.contains(onlineTask)){
+						//Find the offline equivalent
+						Task offlineTask = offlineTasks.get(offlineTasks.indexOf(onlineTask));
+						
+						//Online deletions take precedence 
+						if(onlineTask.getStatus() != Status.ALLOCATED){
+							correctTasks.add(onlineTask);
+						}else{
+							//Local updates task precedence
+							correctTasks.add(offlineTask);
+						}
+					}else{
+						//It must be new,add it to the list of synchronised tasks
+						correctTasks.add(onlineTask);
+					}
+				}
+			}else{
+			//^^We only have the online tasks, must assume correct
+				correctTasks = onlineTasks;
+			}
+			
+			//In either case we can now save to the sever
 			saveToLocal(correctTasks);
 			saveToSvr(correctTasks);
 		}else{
-			//There isnt anything to do but save to local storage
-			correctTasks = currentTasks;
+		//^^We only have the offline tasks
+			if(offlineTasks != null){
+				correctTasks = offlineTasks;
+			}else{
+				correctTasks = null;
+			}
+			
+			//We can save locally but not to the sever at this point
 			saveToLocal(correctTasks);
 		}
 		
@@ -81,9 +115,100 @@ public class Synchroniser {
 	 * @return
 	 * 		The list of tasks or null of none found/no connection made
 	 */
-	private ArrayList<Task> retrieveFromSever(){
-		//To be implemented 
-		return null;
+	private ArrayList<Task> retrieveFromSever(String employeeEmail){
+		
+		//Where we store the tasks we are receiving
+		ArrayList<Task> retrievedTasks = new ArrayList<Task>();
+		
+		//Connect to the database using the given id and password
+        String driver = "com.mysql.jdbc.Driver";
+		String url = "jdbc:mysql://db.dcs.aber.ac.uk/csgp_7_15_16";
+        String user = "csgpadm_7";
+        String password = "Tbart8to";
+        Connection connect = null;
+        java.sql.Statement statement = null;
+        ResultSet resultSet = null;
+        
+        //The names of the column headings in the database for my own reference
+        //Task: title, startDate, ecd, status, memberEmail
+        //TaskElement: elementID, taskID, description
+        //ElementComment: commentID, taskElementID, content
+        
+        System.out.println("About to attempt to establish database connection.");
+        try {
+            System.out.println("Registering driver");
+        	// Register driver
+            Class.forName(driver);
+            System.out.println("Connecting...");
+            connect = DriverManager.getConnection(url, user, password);
+            System.out.println("Connected!");
+            Statement stmt = connect.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Task WHERE memberEmail='"+employeeEmail+"'");
+            
+            // Extract data from resultSet (fix field name)
+            while (rs.next()) {
+        		//Temporarily stores the elements for the current task being read
+        		ArrayList<String> elements = new ArrayList<String>();
+        		//Temporarily stores the comments for the current task being read
+        		ArrayList<String> comments = new ArrayList<String>();
+        		//The converted arraylist to array for the elements and comments
+        		String[] finalElements;
+        		String[] finalComments;
+        		
+        		//Get all of the general task info
+            	int taskID = rs.getInt("taskID");
+            	String title = rs.getString("title");
+                String startDate = rs.getString("startDate");
+                String endDate = rs.getString("ecd");
+                Status status = Status.stringToStatus(rs.getString("status"));
+                String email = rs.getString("memberEmail");
+             
+                //Query the elements table to get all of the task elements
+                Statement eStatement = connect.createStatement();
+                ResultSet elementSet = eStatement.executeQuery("SELECT * FROM TaskElement WHERE taskID='"+taskID+"'");
+                
+                //Extract the elements and related comments
+                while(elementSet.next()){
+                	int elementID = elementSet.getInt("elementID");
+                	
+                	//Get the element
+                	String element = elementSet.getString("description");
+                	elements.add(element);
+                	
+                	//Get the comment
+                	Statement rStatement = connect.createStatement();
+                	ResultSet commentSet = rStatement.executeQuery("SELECT * FROM ElementComment WHERE taskElementID='"+elementID+"'");
+                	while(commentSet.next()){
+                		String comment = commentSet.getString("content");
+                		comments.add(comment);
+                	}
+                	commentSet.close();
+                	rStatement.close();
+                }
+                
+                //Make the new task
+                finalElements = elements.toArray(new String[elements.size()]);
+                finalComments = comments.toArray(new String[comments.size()]);
+                Task newTask = new Task(taskID, title, email, status, finalElements, finalComments, tasker);
+                retrievedTasks.add(newTask);
+                
+                eStatement.close();
+                elementSet.close();
+            }
+            
+            // Close connection
+            rs.close();
+            stmt.close();
+            connect.close();
+        
+        // Catch and print problems to the console
+        } catch (Exception e) {
+            System.out.println("Something went wrong loading from sever.");
+            System.out.println(e.getMessage());
+            return null;
+        }    
+
+		return retrievedTasks;
 	}
 	
 	/**
@@ -122,7 +247,73 @@ public class Synchroniser {
 	 * 			The list of tasks to save.
 	 */
 	private void saveToSvr(ArrayList<Task> tasks){
-		//To be implemented
+		//UPDATE mytable SET foo='bar', baz='bat' WHERE id=12
+		
+		//Connect to the database using the given id and password
+        String driver = "com.mysql.jdbc.Driver";
+		String url = "jdbc:mysql://db.dcs.aber.ac.uk/csgp_7_15_16";
+        String user = "csgpadm_7";
+        String password = "Tbart8to";
+        Connection connect = null;
+        java.sql.Statement statement = null;
+        ResultSet resultSet = null;
+        
+        //The names of the column headings in the database for my own reference
+        //Task: title, startDate, ecd, status, memberEmail
+        //TaskElement: elementID, taskID, description
+        //ElementComment: commentID, taskElementID, content
+        
+        System.out.println("About to attempt to establish database connection.");
+        try {
+            System.out.println("Registering driver");
+        	// Register driver
+            Class.forName(driver);
+            System.out.println("Connecting...");
+            connect = DriverManager.getConnection(url, user, password);
+            System.out.println("Connected!");
+            
+            //loop for each task
+            for(int i = 0; i < tasks.size(); i++){
+            	Task theTask = tasks.get(i);
+            	
+            	//Update the tasks status in the database
+            	PreparedStatement preparedStmt = connect.prepareStatement("UPDATE Task SET status='"+theTask.getStatus()+"'WHERE taskID='"+theTask.getID()+"';");
+                preparedStmt.executeUpdate();
+                preparedStmt.close();
+            	
+                //The comments to save
+            	String[] comments = theTask.getComments();
+            	//The ID of the elements that there are comments on
+            	int[] elementIDs = new int[comments.length];
+            	
+            	//Query the elements table to get all of the task element ID's relevant for this task
+            	//This allows us to then edit the comments with the relevant element ID's
+                Statement eStatement = connect.createStatement();
+                ResultSet elementSet = eStatement.executeQuery("SELECT * FROM TaskElement WHERE taskID='"+theTask.getID()+"'");
+                int j = 0;
+                while(elementSet.next()){
+                	elementIDs[j] = elementSet.getInt("elementID");
+                	j++;
+                }
+                eStatement.close();
+                elementSet.close();
+            
+            	//Loop through each elementID
+                for(j = 0; j < elementIDs.length; j++){
+                	//Update the comment with the given elementID in the database
+                	preparedStmt = connect.prepareStatement("UPDATE ElementComment SET content='"+comments[j]+"'WHERE taskElementID='"+elementIDs[j]+"';");
+                    preparedStmt.executeUpdate();
+                    preparedStmt.close();
+                }
+            }
+            
+            connect.close();
+        
+        // Catch and print problems to the console
+        } catch (Exception e) {
+            System.out.println("Something went wrong saving to server.");
+            System.out.println(e.getMessage());
+        }    
 	}
 	
 	/**
@@ -159,6 +350,8 @@ public class Synchroniser {
 			//loop for each task
 			for(int i = 0; i < noTasks; i++){
 				Task task;
+				//The tasks ID
+				int ID;
 				//The tasks title
 				String title;
 				//The string read from the file for status
@@ -170,18 +363,20 @@ public class Synchroniser {
 				String[] comments;
 				
 				//Read the general task information
+				ID = infile.nextInt();
+				infile.nextLine();
 				title = infile.nextLine();
 				readStatus = infile.nextLine(); 
 				//Read the start date
 				//Read the complete date
 				
 				//Allocate the status based on the string
-				if(readStatus.substring(0, 2).equals("AL")){
+				if(readStatus.substring(0, 2).equals("al")){
 					status = Status.ALLOCATED;
-				}else if(readStatus.substring(0, 2).equals("AB")){
+				}else if(readStatus.substring(0, 2).equals("ab")){
 					status = Status.ABANDONED;
 				}else{
-					status = Status.COMPLETE;
+					status = Status.COMPLETED;
 				}
 				
 				//Read the amount of elements and initialise the arrays
@@ -197,7 +392,7 @@ public class Synchroniser {
 				}
 				
 				//Create a new tasks with this information
-				task = new Task(title, employeeEmail, status, elements, comments, tasker);
+				task = new Task(ID, title, employeeEmail, status, elements, comments, tasker);
 				tasks.add(task);
 			}
 			

@@ -16,29 +16,66 @@ header{
 }
 
 main{
-    position: relative;
-    margin-top: -20px;
     background-color: #333;
+    margin-top: -20px;
     color: white;
-    height: 50%;
+    height: 100%;
     width: 100%;
 }
 
 #navTop{
     float:left;
     width: 20%;
+    height: 30px;
+    background-color: #333;
 }
 
 #navBody{
     float: left;
     width: 20%;
+    height: 20%;
+    background-color: #333;
+    clear: both;
+    overflow-y:auto;
 }
+
+.submitButton{
+    text-align: left;
+    -webkit-transition: 0.3s ease-in-out;
+    -moz-transition: 0.3s ease-in-out;
+    -ms-transition: 0.3s ease-in-out;
+    -o-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+    text-decoration: none;
+    padding: 1px 1px;
+    color: white;
+    display:block;
+    background-color: #333;
+    color: #fff;
+    font-family: 'font-family: 'Roboto', sans-serif;';
+    font-size: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    border:none;
+    width: 100%;
+    white-space: normal;
+}
+
+.submitButton:hover{
+    background-color: #111;
+}
+
 #mainBody{
-    float: right;
+    background-color: #333;
+    float: left;
+    width: 80%;
 }
 
 #mainTop{
-    float: right;
+    float: left;
+    width; 80%;
+    background-color: #333;
+
 }
 
 .Login{
@@ -47,6 +84,10 @@ main{
     border: 3px solid #9a9a9a;
     padding: 10px;
     height: 50%;
+}
+
+#loginForm{
+    
 }
 
 a{

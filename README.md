@@ -42,7 +42,7 @@ taskerCLI ERRORS
 
 HOW DO I FIX BUG??
 
-Ask Kurt? <--this.
+Most errors that will occur with the client will arise from a loss of connection. If that is the case, the best thing to do is probably close the application down and reload it once the connection has returned.
 
 USING taskerMAN
 
@@ -56,7 +56,7 @@ Select ‘Manage members’ in the top right corner of the page. Select the memb
 
 How do I delete a team member?
 
-Currently it is not possible to delete a team member.
+Select the team member you wish to delete, a delete button will appear. Upon clicking it you will be prompted to confirm your deletion. Once deleted you will be redirected to the main page.
 
 How do I filter tasks?  &
 Which parameters can I filter by?

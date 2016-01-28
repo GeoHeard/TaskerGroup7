@@ -1,25 +1,27 @@
 <?php
-//$servername = "db.dcs.aber.ac.uk";
-//$dbName = "csgp_7_15_16";
-//$username = "csgpadm_7";
-//$password = "Tbart8to";
-//
-//// TURNS OFF ERROR REPORTING!
-//error_reporting(0);
-//
-//try {
-//    $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
-//    // set the PDO error mode to exception
-//    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//}
-//catch(PDOException $e)
-//{
-//
-//}
+$servername = "db.dcs.aber.ac.uk";
+$dbName = "csgp_7_15_16";
+$username = "csgpadm_7";
+$password = "Tbart8to";
+$rootpath = "crb15/taskerMAN";
+
+// TURNS OFF ERROR REPORTING!
+error_reporting(0);
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}
+catch(PDOException $e)
+{
+
+}
 
 function loadInit($contentToLoad, $conn, $filter = null){
     $tableToUse = "";
     $buttonPath = "";
+    global $rootpath;
 
 //    if($conn == null) {
 //        if($contentToLoad == "dberror") {
