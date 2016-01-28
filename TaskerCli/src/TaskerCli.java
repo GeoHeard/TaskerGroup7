@@ -3,7 +3,17 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 import javax.swing.AbstractAction;
 
 import javax.swing.BorderFactory;
@@ -13,8 +23,11 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 /**
  * This is the main class for the program TaskerCli, developed for
@@ -62,7 +75,7 @@ public class TaskerCli {
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//Add the login screen panel
-        LoginScreen loginScreen = new LoginScreen(this, "kuh1@aber.ac.uk");
+        LoginScreen loginScreen = new LoginScreen(this, readLastEmail());
         gui.add(loginScreen);
         
         //Make sure the GUI is visible
@@ -75,8 +88,6 @@ public class TaskerCli {
 	 * logged in. 
 	 */
 	public void initialiseMainScreen(){
-		//CHECK IF TASKS LIST IS NULL??
-		
 		//Create a new GUI frame
 		gui.dispose();
 		gui = new JFrame("TaskerCli");
@@ -113,8 +124,11 @@ public class TaskerCli {
 		tasks = synchroniser.retrieveTasksFromLocal();
 		tasks = synchroniser.synchroniseTasks(tasks);
 		
-		//TO DO: CODE TO SAVE INPUT EMAIL ADDRESS IF REMEMBERED
-		//TO DO: SORT OUT ERROR CHECKING CODE FOR INPUT EMAIL
+		if(doRemember){
+			saveLastEmail(userEmail);
+		}else{
+			saveLastEmail("");
+		}
 		
 		/*If there were no tasks found... In future I want to catch a specific exception
 		 * and flash an error message.*/
@@ -136,13 +150,60 @@ public class TaskerCli {
 	 */
 	public void saveChanges(){
 		tasks = synchroniser.synchroniseTasks(tasks);
+		mainScreen.refreshTaskMenu(tasks);
+		//We want to remove the task panel if no longer allocated
+		mainScreen.refereshTaskPanel();
 	}
 
 	/**
 	 * 
 	 */
 	void cancelChanges(){
-		mainScreen.refereshTaskPanel();
+		//Here we want to reset the task panel
+		mainScreen.resetTaskPanel();
+	}
+	
+	/*
+	 * Save the input email into a file 'lastEmail.txt' to be recalled next time the program
+	 * is run.
+	 */
+	private void saveLastEmail(String email){System.out.println(email);
+		//Create a file writer
+		try(FileWriter fw = new FileWriter("lastEmail.txt");
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter outfile = new PrintWriter(bw);){
+
+			//Output user email on the first line
+			outfile.println(email);
+		} catch (IOException e) {
+			System.err.println("Problem when trying to save last email");
+		}
+	}
+	
+	/*
+	 * Reads the email file to see if the last email input was saved.
+	 */
+	private String readLastEmail(){
+		String lastEmail;
+		
+		//Try to read from the users file
+		try(FileReader fr = new FileReader("lastEmail.txt");
+			BufferedReader br = new BufferedReader(fr);
+			Scanner infile = new Scanner(br)){
+					
+			lastEmail = infile.nextLine();
+			
+			//Catch the various possible errors, such as the user not having a file
+			} catch (FileNotFoundException nf){
+				saveLastEmail("");
+				return null;
+			} catch (Exception e) {
+				System.out.println("Error loading last email: " + e.toString());
+				saveLastEmail("");
+				return null;
+			}
+		
+		return lastEmail;
 	}
 	
 	/* *******************************************************************************

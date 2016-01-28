@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 	
 /**
@@ -25,6 +26,7 @@ public class MainScreen extends JPanel{
 	private ArrayList<Task> tasks;
 	private JPanel taskPanel;
 	private Task currentTask;
+	private JMenuBar sideMenu;
 		
 	/**
 	* Create the panel for the main screen
@@ -45,11 +47,48 @@ public class MainScreen extends JPanel{
 	}
 	
 	/**
-	 * 
+	 * Creates a new task menu only containing the tasks marked as
+	 * 'ALLOCATED'
+	 */
+	public void refreshTaskMenu(ArrayList<Task> newTasks){
+		tasks = newTasks;
+		
+		remove(sideMenu);
+		
+		//Add the side menu
+        sideMenu = new JMenuBar();
+        //Make it a vertical menu
+        sideMenu.setLayout(new GridLayout(0,1));
+        populateMenu(sideMenu, tasks); 
+        //Make sure it sits at the left hand side of the screen and that the section is bordered
+        add(sideMenu, BorderLayout.WEST);
+        sideMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Color.black));
+	}
+	
+	/**
+	 *  If a task is no longer marked 'ALLOCATED' then the panel is removed
 	 */
 	public void refereshTaskPanel(){
+		if(currentTask.getStatus() != Status.ALLOCATED){
+			removeTaskPanel();
+		}
+	}
+	
+	/**
+	 * Resets the task panel to show the original comments before changes if the user has not yet hit 'save changes'
+	 */
+	public void resetTaskPanel(){
+		remove(taskPanel);	
+		this.updateTaskPanel(currentTask.initialiseTaskPanel());	
+	}
+	
+	/**
+	 * Removes the current task panel and repaints/revalidates
+	 */
+	private void removeTaskPanel(){
 		remove(taskPanel);
-		this.updateTaskPanel(currentTask.initialiseTaskPanel());
+		this.revalidate();
+		this.repaint();
 	}
 		
 	/**
@@ -64,7 +103,7 @@ public class MainScreen extends JPanel{
         title.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.black));
         
         //Add the side menu
-        JMenuBar sideMenu = new JMenuBar();
+        sideMenu = new JMenuBar();
         //Make it a vertical menu
         sideMenu.setLayout(new GridLayout(0,1));
         populateMenu(sideMenu, theTasks); 
@@ -112,6 +151,11 @@ public class MainScreen extends JPanel{
 			}
 		}
 		
+		//If there are no tasks make sure the user knows and doesnt think there is a bug
+		if(theMenu.getMenuCount() < 1){
+			JOptionPane.showMessageDialog(this, "You do not have any allocated tasks at the moment");
+		}
+		
 		/*
 		 * Add blank spaces to the menu if there are less than 10 buttons
 		 * This makes the buttons a nice size
@@ -156,5 +200,6 @@ public class MainScreen extends JPanel{
 		taskPanel = thePanel;
 		add(taskPanel, BorderLayout.CENTER);
 		this.revalidate();
+		this.repaint();
 	}
 }

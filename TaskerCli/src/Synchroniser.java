@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.sql.*;
 
 /**
@@ -19,11 +21,12 @@ import java.sql.*;
  * @version 0.2
  * @date 28/11/2015
  */
-public class Synchroniser {
+public class Synchroniser{
 	
 	private String employeeEmail;
 	private TaskerCli tasker;
 	private String fileName;
+	private Timer repeatSynchronise;
 	
 	/**
 	 * Creates a new synchroniser for the input user.
@@ -37,6 +40,7 @@ public class Synchroniser {
 		tasker = mainProgram;
 		//Either just use one file name or come up with a better system e.g. loop until a char not in the set{<a-b,A-B,0-9>} appears.
 		fileName = userEmail.substring(0, 3) + ".txt";
+		repeatSynchronise = new Timer();
 	}
 	
 	/**
@@ -75,6 +79,7 @@ public class Synchroniser {
 						//Find the offline equivalent
 						Task offlineTask = offlineTasks.get(offlineTasks.indexOf(onlineTask));
 						
+						System.out.println(onlineTask.getStatus());
 						//Online deletions take precedence 
 						if(onlineTask.getStatus() != Status.ALLOCATED){
 							correctTasks.add(onlineTask);
@@ -107,6 +112,13 @@ public class Synchroniser {
 			saveToLocal(correctTasks);
 		}
 		
+		//If this method has been in any way successful, we will attempt to repeat it in 5 minutes
+		if(correctTasks != null){
+			repeatSynchronise.cancel();
+			repeatSynchronise.purge();
+			repeatSynchronise = new Timer();
+			repeatSynchronise.schedule(new RepeatSynchroniser(tasker), 300000);
+		}
 		return correctTasks;
 	}
 	
@@ -119,6 +131,10 @@ public class Synchroniser {
 		
 		//Where we store the tasks we are receiving
 		ArrayList<Task> retrievedTasks = new ArrayList<Task>();
+		
+		/**
+		 * PUT THE BELOW INFO IN A TXT FILE??? 
+		 */
 		
 		//Connect to the database using the given id and password
         String driver = "com.mysql.jdbc.Driver";
@@ -189,7 +205,7 @@ public class Synchroniser {
                 //Make the new task
                 finalElements = elements.toArray(new String[elements.size()]);
                 finalComments = comments.toArray(new String[comments.size()]);
-                Task newTask = new Task(taskID, title, email, status, finalElements, finalComments, tasker);
+                Task newTask = new Task(taskID, title, email, status, startDate, endDate, finalElements, finalComments, tasker);
                 retrievedTasks.add(newTask);
                 
                 eStatement.close();
@@ -248,6 +264,10 @@ public class Synchroniser {
 	 */
 	private void saveToSvr(ArrayList<Task> tasks){
 		//UPDATE mytable SET foo='bar', baz='bat' WHERE id=12
+		
+		/**
+		 * PUT THE BELOW INFO IN A TXT FILE???
+		 */
 		
 		//Connect to the database using the given id and password
         String driver = "com.mysql.jdbc.Driver";
@@ -312,7 +332,7 @@ public class Synchroniser {
         // Catch and print problems to the console
         } catch (Exception e) {
             System.out.println("Something went wrong saving to server.");
-            System.out.println(e.getMessage());
+            System.out.println(e.toString());
         }    
 	}
 	
@@ -352,12 +372,11 @@ public class Synchroniser {
 				Task task;
 				//The tasks ID
 				int ID;
-				//The tasks title
+				//The general task info
 				String title;
-				//The string read from the file for status
-				String readStatus;
-				//The status interpreted from the above string
 				Status status;
+				String startDate;
+				String endDate;
 				//The tasks elements and comments
 				String[] elements;
 				String[] comments;
@@ -366,18 +385,9 @@ public class Synchroniser {
 				ID = infile.nextInt();
 				infile.nextLine();
 				title = infile.nextLine();
-				readStatus = infile.nextLine(); 
-				//Read the start date
-				//Read the complete date
-				
-				//Allocate the status based on the string
-				if(readStatus.substring(0, 2).equals("al")){
-					status = Status.ALLOCATED;
-				}else if(readStatus.substring(0, 2).equals("ab")){
-					status = Status.ABANDONED;
-				}else{
-					status = Status.COMPLETED;
-				}
+				status = Status.stringToStatus(infile.nextLine()); 
+				startDate = infile.nextLine();
+				endDate = infile.nextLine();
 				
 				//Read the amount of elements and initialise the arrays
 				noElements = infile.nextInt();
@@ -392,26 +402,48 @@ public class Synchroniser {
 				}
 				
 				//Create a new tasks with this information
-				task = new Task(ID, title, employeeEmail, status, elements, comments, tasker);
+				task = new Task(ID, title, employeeEmail, status, startDate, endDate, elements, comments, tasker);
 				tasks.add(task);
 			}
 			
 		//Catch the various possible errors, such as the user not having a file
 		} catch (FileNotFoundException e) {
-			System.err.println("Load error 1");
+			System.err.println("There is no local data on this computer");
 			return null;
 		} catch (IOException e) {
-			System.err.println("Load error 2");
+			System.err.println("There is a local data file but it is corrupted. One solution is just to delete the file");
 			return null;
 		} catch (InputMismatchException e) {
-			System.err.println("Load error 3");
+			System.err.println("There is a local data file but it is corrupted. One solution is just to delete the file");
 			return null;
 		}
 		
 		return tasks;
 	}
 	
-	/*
-	private void invokeSynchronise(ArrayList<Task> tasks)
+	/**
+	 * 
+	 * @author kurt
 	 */
+	private class RepeatSynchroniser extends TimerTask {
+	    private TaskerCli tasker;
+		
+	    /**
+	     * 
+	     * @param syncrhoniser
+	     */
+		RepeatSynchroniser(TaskerCli taskerCli){
+	    	super();
+	    	tasker = taskerCli;
+	    }
+		
+		/**
+		 * 
+		 */
+		public void run() {
+			if(tasker != null){
+				tasker.saveChanges();
+			}
+	    }
+	 }
 }

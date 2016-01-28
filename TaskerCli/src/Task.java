@@ -38,9 +38,9 @@ public class Task {
 	private String email;
 	
 	//When the task was created
-	//private Date startDate;
+	private String startDate;
 	//When the task is expected to be completed
-	//private Date completeDate;
+	private String completeDate;
 	
 	private Status status;
 	//Each string in this array stores a whole task element.
@@ -59,12 +59,12 @@ public class Task {
 	 * 			The name of the task
 	 * @param newEmail
 	 * 			The email of the allocated employee
-	 *@param start
-	 *
-	 *@param end
-	 *
 	 * @param newStatus
 	 * 			The status of the task
+	 *@param start
+	 *			The date the task started stored as string
+	 *@param end
+	 *			The date the task should be completed by stored as a string
 	 * @param newElements
 	 * 			The list of task elements written by the manager
 	 * @param newComments
@@ -72,12 +72,12 @@ public class Task {
 	 * @param mainProgram
 	 * 			The current instance of TaskerCli
 	 */
-	public Task(int ID, String newTitle, String newEmail,/* Date start, Date end,*/ Status newStatus, String[] newElements, String[] newComments, TaskerCli mainProgram){
+	public Task(int ID, String newTitle, String newEmail, Status newStatus, String start, String end, String[] newElements, String[] newComments, TaskerCli mainProgram){
 		taskID = ID;
 		title = newTitle;
 		email = newEmail;
-		//startDate = start;
-		//completeDate = end;
+		startDate = start;
+		completeDate = end;
 		status = newStatus;
 		elements = newElements;
 		comments = newComments;
@@ -134,8 +134,8 @@ public class Task {
 		pw.println(taskID);
 		pw.println(title);
 		pw.println(status);
-		//pw.println(start);
-		//pw.println(end);
+		pw.println(startDate);
+		pw.println(completeDate);
 		
 		//print the number of task elements
 		pw.println(elements.length);
@@ -165,6 +165,14 @@ public class Task {
 	
 	public String[] getComments(){
 		return comments;
+	}
+	
+	public String getStartDate(){
+		return startDate;
+	}
+	
+	public String getEndDate(){
+		return completeDate;
 	}
 	
 	/**
@@ -229,11 +237,11 @@ public class Task {
           	add(title);
           	       	
           	//Add the title
-          	JSLabel startDate = new JSLabel("Start Date: ", "Arial", Font.PLAIN, 16);
+          	JSLabel startDate = new JSLabel("Start Date: " + theTask.getStartDate(), "Arial", Font.PLAIN, 16);
           	add(startDate);
           	
           	//Add the title
-          	JSLabel endDate = new JSLabel("Expected Completion Date: ", "Arial", Font.PLAIN, 16);
+          	JSLabel endDate = new JSLabel("Expected Completion Date: " + theTask.getEndDate(), "Arial", Font.PLAIN, 16);
           	add(endDate);
           	
             //Add the list of task elements and task comments after a space
@@ -250,8 +258,6 @@ public class Task {
           	
           	//Add the two buttons
           	add(createButtons());
-          	//Add padding below this element
-            add(Box.createVerticalGlue());
 		}
 		
 		/**
