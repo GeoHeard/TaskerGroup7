@@ -39,6 +39,8 @@ if (isset($_POST["taskSelect"])) {
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
+} else if (isset($_POST["confirmTaskCancel"])) {
+    header("Location: main.php");
 }
 ?>
 <!DOCTYPE html>
@@ -133,7 +135,7 @@ loadInit("task", $conn);
                 <br/>
                 <hr/>
                 <input type="submit" id="toggledButton" name="confirmTaskChanges" value="Confirm changes" disabled/>
-                <input type="submit" name="confirmTaskChanges" value="Cancel"/>
+                <input type="submit" name="confirmTaskCancel" value="Cancel"/>
             </fieldset>
             <input type="hidden" form="viewTaskElements" name="taskID" value="<?php echo $currTask['taskID']; ?>" />
             <input type="submit" form="viewTaskElements" name="viewTaskElements" value="View task elements and comments" />

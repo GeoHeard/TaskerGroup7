@@ -48,12 +48,12 @@ if (isset($_POST["memberSelect"])) {
         }
     }
 } else if (isset($_POST['confirmMemberDelete'])) {
-    print_r($currMember);
     $sql = "DELETE FROM TeamMember WHERE email='" . $_POST['memberEmail'] . "';";
-    echo $sql;
     $conn->exec($sql);
     header("Location: ../actionsuccess.php");
 
+} else if (isset($_POST['confirmMemberCancel'])) {
+    header("Location: main.php");
 }
 ?>
 <!DOCTYPE html>
@@ -120,7 +120,7 @@ loadInit("member", $conn);
                 <hr />
                 <input type="submit" id="confirmMemberChanges" name="confirmMemberChanges" value="Confirm changes" disabled />
                 <input type="submit" id="confirmMemberDelete" name="confirmMemberDelete" value="Delete member" onclick="return confirm('Are you sure you wish to delete this member? Click \'OK\' to confirm or \'Cancel\' to abort.');"/>
-                <input type="submit" name="confirmTaskChanges" value="Cancel" />
+                <input type="submit" name="confirmMemberCancel" value="Cancel" />
             </fieldset>
         </form>
     </div>
