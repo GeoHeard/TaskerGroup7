@@ -83,11 +83,11 @@ function loadInit($contentToLoad, $conn, $filter = null){
         echo "<nav>";
         echo "<div id='navTop'>";
         echo "<form id='navTopNewButton' action='" . $buttonPath . "' method='POST'>";
-        echo "<input type='submit' class='submitButtonTop' value='New " . $contentToLoad . "'/>";
+        echo "<input type='submit' value='New " . $contentToLoad . "'/>";
         echo "</form>";
         if ($contentToLoad == "task") {
             echo "<form id='navTopFilterButton' action='../tasks/filtertasks.php' method='POST'>";
-            echo "<input type='submit' class='submitButtonTop' value='Filter tasks'/>";
+            echo "<input type='submit' value='Filter tasks'/>";
             echo "</form>";
         }
         echo "</div>";
@@ -110,8 +110,7 @@ function loadInit($contentToLoad, $conn, $filter = null){
                     }
                 }
                 $query .= " ORDER BY ecd";
-                //echo $query;
-                echo "<form action='viewtask.php' id='viewTask' method='POST'>";
+                echo "<form action='viewtask.php' method='POST'>";
                 echo "<input type='hidden' name='taskSelect' value='1' />";
                 foreach($conn->query($query) as $row){
                     echo "<input type='submit' class='submitButton' name='" . $row['taskID'] . "' value='" . $row['title'] . "' />";

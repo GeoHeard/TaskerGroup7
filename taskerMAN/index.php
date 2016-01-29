@@ -17,18 +17,9 @@ loadInit("default", $conn);
         <h2>Welcome</h2>
     </div>
     <div id="mainBody">
-        <form id='loginForm' action='tasks/main.php' method='POST'>
-            <fieldset>
-                <legend>Please log in</legend>
-                <label>Username</label>
-                <input type='text' id='loginFormUsername' />
-                <br />
-                <label>Password</label>
-                <input type='text' id='loginFormPassword' />
-                <br />
-                <input type='submit' id='loginFormSubmit' value='Login' />
-            </fieldset>
-        </form>
+        <p>TaskerMAN is part of a distributed software system for task management.</p>
+        <p>It is available for download on <a id="github" href="https://github.com/GeorgePeorge/TaskerGroup7">GitHub</a></p>
+        <p>For the full experience, you should also download the TaskerCLI Java Application.</p>
     </div>
 </main>
 

@@ -125,6 +125,14 @@ loadInit("task", $conn);
                 <input type='date' id='expectedCompletionDate' name='expectedCompletionDate'
                        value='<?php echo $currTask['ecd']; ?>' disabled/>
                 <br/>
+                <label for="taskElements">Task elements - Please enter each element on a new line</label>
+                <input type="hidden" id="taskElementsDefault" name="taskElementsDefault" value='<?php echo $currTask["taskElements"]; ?>'/>
+                <br />
+                <textarea name="taskElements" id="taskElements" form="viewTaskForm" rows="6" cols="30" onchange="checkDropdown()" disabled><?php echo $currTask["taskElements"] ?></textarea>
+                <br />
+                <input type="hidden" form="viewTaskElements" name="taskID" value="<?php echo $currTask['taskID']; ?>" />
+                <input type="submit" form="viewTaskElements" name="viewTaskElements" value="View task elements and comments" />
+                <br />
                 <label for="abandonTask">Abandon task?</label>
                 <input type="hidden" id="abandonTaskDefault" name="abandonTaskDefault"
                        value="<?php if ($currTask["status"] == "abandoned" || $currTask["status"] == "completed") {
@@ -138,20 +146,13 @@ loadInit("task", $conn);
                 <hr/>
                 <input type="submit" id="toggledButton" name="confirmTaskChanges" value="Confirm changes" disabled/>
                 <input type="submit" name="confirmTaskCancel" value="Cancel"/>
+                
             </fieldset>
-            <input type="hidden" form="viewTaskElements" name="taskID" value="<?php echo $currTask['taskID']; ?>" />
-            <input type="submit" form="viewTaskElements" name="viewTaskElements" value="View task elements and comments" />
+            
         </form>
     </div>
-    <div id="mainRight">
-
-        <label for="taskElements">Task elements - Please enter each element on a new line</label>
-        <input type="hidden" id="taskElementsDefault" name="taskElementsDefault"
-               value='<?php echo $currTask["taskElements"]; ?>'/>
-        <textarea name="taskElements" id="taskElements" form="viewTaskForm" rows="6" cols="30"
-                  onchange="checkDropdown()" disabled><?php echo $currTask["taskElements"] ?></textarea>
-    </div>
     <form id="viewTaskElements" action="viewtaskelements.php" target="_blank" method="GET"></form>
+    
 </main>
 </body>
 </html>

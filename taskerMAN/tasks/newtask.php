@@ -102,6 +102,11 @@ header("refresh:300;url=../timeout.php");
                 <input type="date" id="taskCompletionDate" name="taskCompletionDate" max="64"
                        value="<?php echo htmlentities($taskCompletionDate); ?>"/>
                 <span class='error'><?php echo $taskCompletionDateError ?></span>
+                <br />
+                <label for="taskElements">Task elements - Please enter each element on a new line</label>
+                <br/>
+                <textarea name="taskElements" form="newTaskForm" rows="6" cols="30"></textarea>
+                <span class='error'><?php echo $taskElementsError ?></span>
                 <br/>
                 <hr/>
                 <input type="submit" name="newTaskSubmit" value="Create"/>
@@ -109,12 +114,7 @@ header("refresh:300;url=../timeout.php");
             </fieldset>
         </form>
     </div>
-    <div id="mainBodyRight">
-        <label for="taskElements">Task elements - Please enter each element on a new line</label>
-        <br/>
-        <textarea name="taskElements" form="newTaskForm" rows="6" cols="30"></textarea>
-        <span class='error'><?php echo $taskElementsError ?></span>
-    </div>
+
 </main>
 
 </body>
