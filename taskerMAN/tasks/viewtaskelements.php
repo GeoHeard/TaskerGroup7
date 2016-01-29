@@ -9,7 +9,7 @@
 <?php
 require_once("../components/dbconnect.php");
 require_once("../components/init.php");
-loadInit("default", $conn);
+loadInit("task", $conn);
 ?>
 
 <main>
