@@ -41,6 +41,8 @@ if (isset($_POST["taskSelect"])) {
     }
 } else if (isset($_POST["confirmTaskCancel"])) {
     header("Location: main.php");
+} else {
+    header("Location: main.php");
 }
 ?>
 <!DOCTYPE html>
