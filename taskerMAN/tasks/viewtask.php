@@ -28,7 +28,7 @@ if (isset($_POST["taskSelect"])) {
     $currTask["status"] = $_POST["abandonTask"] == "on" ? "abandoned" : "allocated";
     try {
         if ($_POST["teamMemberDefault"] != $_POST["teamMember"]) {
-            $sql = "UPDATE Task SET memberEmail='" . $_POST["teamMember"] . "' WHERE memberEmail='" . $_POST["teamMemberDefault"] . "';";
+            $sql = "UPDATE Task SET memberEmail='" . $_POST["teamMember"] . "' WHERE taskID='" . $_POST["taskID"] . "';";
             $sth = $conn->exec($sql);
         }
 
@@ -135,11 +135,12 @@ loadInit("task", $conn);
                 <input type="submit" id="toggledButton" name="confirmTaskChanges" value="Confirm changes" disabled/>
                 <input type="submit" name="confirmTaskChanges" value="Cancel"/>
             </fieldset>
+            <input type="hidden" form="viewTaskElements" name="taskID" value="<?php echo $currTask['taskID']; ?>" />
+            <input type="submit" form="viewTaskElements" name="viewTaskElements" value="View task elements and comments" />
         </form>
     </div>
     <div id="mainRight">
-        <input type="hidden" form="viewTaskElements" name="taskID" value="<?php echo $currTask['taskID']; ?>" />
-        <input type="submit" form="viewTaskElements" name="viewTaskElements" value="View task elements and comments" />
+
         <label for="taskElements">Task elements - Please enter each element on a new line</label>
         <input type="hidden" id="taskElementsDefault" name="taskElementsDefault"
                value='<?php echo $currTask["taskElements"]; ?>'/>
