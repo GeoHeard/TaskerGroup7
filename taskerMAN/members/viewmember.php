@@ -16,7 +16,7 @@ if (isset($_POST["memberSelect"])) {
     $sth->execute();
     $currMember = $sth->fetch(PDO::FETCH_ASSOC);
 // else if we've just updated the user details, fill the fields with what was previously in them
-}else if (isset($_GET["confirmMemberChanges"])) {
+}else if (isset($_POST["confirmMemberChanges"])) {
     require_once("../components/validators/validateMemberDetails.php");
     $currMember = ["lastName"=>$memberLastName, "firstName"=>$memberFirstName, "email"=>$memberEmail];
     if(!$error){ // $error is from the validateMemberDetails php
@@ -24,41 +24,32 @@ if (isset($_POST["memberSelect"])) {
         //Do form processing like email, database etc here
 
         try {
-
             if($memberLastNameDefault != $memberLastName) {
-                echo "test1";
-                $sql = "UPDATE TeamMember SET lastName='" . $memberLastName . "' WHERE email='" . $_GET["memberEmailDefault"] . "';";
+                $sql = "UPDATE TeamMember SET lastName='" . $memberLastName . "' WHERE email='" . $_POST["memberEmailDefault"] . "';";
                 $sth = $conn->exec($sql);
             }
 
             if($memberFirstNameDefault != $memberFirstName) {
-                echo "test2";
-                $sql = "UPDATE TeamMember SET firstName='" . $memberFirstName . "' WHERE email='" . $_GET["memberEmailDefault"] . "';";
+                $sql = "UPDATE TeamMember SET firstName='" . $memberFirstName . "' WHERE email='" . $_POST["memberEmailDefault"] . "';";
                 $sth = $conn->exec($sql);
             }
 
-            if ($_GET["memberEmailDefault"] != $_GET["memberEmail"]) {
-                echo "test3";
-                echo $_GET["memberEmail"];
-                $sql = "INSERT INTO TeamMember VALUES ('$memberFirstName', '$memberLastName', '" . $_GET["memberEmail"] . "');";
+            if ($_POST["memberEmailDefault"] != $_POST["memberEmail"]) {
+                echo $_POST["memberEmail"];
+                $sql = "INSERT INTO TeamMember VALUES ('$memberFirstName', '$memberLastName', '" . $_POST["memberEmail"] . "');";
                 $sth = $conn->exec($sql);
-                $sql = "UPDATE Task SET memberEmail='" . $_GET["memberEmail"] . "' WHERE memberEmail='" . $_GET["memberEmailDefault"] . "';";
+                $sql = "UPDATE Task SET memberEmail='" . $_POST["memberEmail"] . "' WHERE memberEmail='" . $_POST["memberEmailDefault"] . "';";
                 $sth = $conn->exec($sql);
-                $sql = "DELETE FROM TeamMember WHERE email='" . $_GET["memberEmailDefault"] . "';";
+                $sql = "DELETE FROM TeamMember WHERE email='" . $_POST["memberEmailDefault"] . "';";
                 $sth = $conn->exec($sql);
-
             }
-
-//            $sql = "UPDATE TeamMember SET ";
-//            $sql = "INSERT INTO TeamMember VALUES ('$memberFirstName', '$memberLastName', '$memberEmail');";
-//            $sth = $conn->query($sql);
         } catch(PDOException $e) {
             echo $e->getMessage();
         }
     }
-} else if (isset($_GET['confirmMemberDelete'])) {
+} else if (isset($_POST['confirmMemberDelete'])) {
     print_r($currMember);
-    $sql = "DELETE FROM TeamMember WHERE email='" . $_GET['memberEmail'] . "';";
+    $sql = "DELETE FROM TeamMember WHERE email='" . $_POST['memberEmail'] . "';";
     echo $sql;
     $conn->exec($sql);
     header("Location: ../actionsuccess.php");
@@ -100,8 +91,8 @@ loadInit("member", $conn);
 <main>
     <div id="mainTop">
         <h2><?php
-            if (isset($_GET["confirmTaskChanges"])) {
-                echo $_GET["memberLastNameDefault"] . ", " . $_GET["memberFirstNameDefault"];
+            if (isset($_POST["confirmTaskChanges"])) {
+                echo $_POST["memberLastNameDefault"] . ", " . $_POST["memberFirstNameDefault"];
             }else{
                 echo $currMember['lastName'] . ", " . $currMember['firstName'];
             }

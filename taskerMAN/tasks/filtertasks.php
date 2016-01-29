@@ -10,9 +10,9 @@
 <?php
 require_once("../components/dbconnect.php");
 require_once("../components/init.php");
-if (isset($_GET["filterTaskSubmit"])){
-    if ($_GET["filterTaskSubmit"] == "Submit"){
-        loadInit("task", $conn, [$_GET["taskStatusFilter"], $_GET["taskTeamMemberFilter"]]);
+if (isset($_POST["filterTaskSubmit"])){
+    if ($_POST["filterTaskSubmit"] == "Submit"){
+        loadInit("task", $conn, [$_POST["taskStatusFilter"], $_POST["taskTeamMemberFilter"]]);
     }else{
         header("Location: ../index.php");
     }
@@ -27,7 +27,7 @@ if (isset($_GET["filterTaskSubmit"])){
         <h2>Filter tasks</h2>
     </div>
     <div id="mainBody">
-        <form id="filterTasksForm" name="filterTasksForm" action="" method="GET">
+        <form id="filterTasksForm" name="filterTasksForm" action="" method="POST">
             <fieldset>
                 <legend>Filter by</legend>
                 <label for="taskStatusFilter">Task status</label>

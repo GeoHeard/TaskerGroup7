@@ -4,9 +4,9 @@ $lastNameError = "";
 $firstNameError = "";
 $memberEmailError = "";
 
-if(!empty($_GET['newMemberSubmit'])) {//if submitted, then validate
+if(!empty($_POST['newMemberSubmit'])) {//if submitted, then validate
 
-    if ($_GET['newMemberSubmit'] == "Cancel"){
+    if ($_POST['newMemberSubmit'] == "Cancel"){
         header("Location: ../index.php");
     }
 
@@ -52,7 +52,7 @@ header("refresh:300;url=../timeout.php");
         <h2>New member</h2>
     </div>
     <div id="mainBody">
-        <form id="newMemberForm" name="newMemberForm" action="?" method="GET">
+        <form id="newMemberForm" name="newMemberForm" action="?" method="POST">
             <fieldset>
                 <label for="memberLastName">Last name</label>
                 <input type="text" id="memberLastName" name="memberLastName" max="64" value="<?php echo htmlentities($memberLastName); ?>" />

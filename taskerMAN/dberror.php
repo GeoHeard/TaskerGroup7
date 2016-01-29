@@ -10,9 +10,6 @@
 <?php
 require_once("components/init.php");
 loadInit("dberror", $conn);
-if ($conn == null){
-    header("Location: index.php");
-}
 ?>
 
 <main>

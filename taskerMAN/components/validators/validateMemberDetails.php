@@ -1,7 +1,7 @@
 <?php
-$memberLastName = trim($_GET['memberLastName']);
-$memberFirstName = trim($_GET['memberFirstName']);
-$memberEmail = trim($_GET['memberEmail']);
+$memberLastName = trim($_POST['memberLastName']);
+$memberFirstName = trim($_POST['memberFirstName']);
+$memberEmail = trim($_POST['memberEmail']);
 $error = false;
 
 if(empty($memberLastName)) {
@@ -28,7 +28,6 @@ if(empty($memberFirstName)) {
         echo $e->getMessage();
     }
 
-
 if(empty($memberEmail)) {
     $memberEmailError = "Please enter an email";
     $error=true;
@@ -36,15 +35,4 @@ if(empty($memberEmail)) {
     $memberEmailError = "Email is not valid";
     $error = true;
 }
-//if(!$error){
-//    //Validation Success!
-//    //Do form processing like email, database etc here
-//
-//    try {
-//        $sql = "INSERT INTO TeamMember VALUES ('$memberLastName', '$memberFirstName', '$memberEmail');";
-//        $sth = $conn->query($sql);
-//    } catch(PDOException $e) {
-//        echo $e->getMessage();
-//    }
-//}
 ?>

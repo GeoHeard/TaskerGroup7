@@ -1,8 +1,8 @@
 <?php
-$taskTitle = trim($_GET['taskTitle']);
-$taskStartDate = trim($_GET['taskStartDate']);
-$taskCompletionDate = trim($_GET['taskCompletionDate']);
-$taskElementsRaw = $_GET['taskElements'];
+$taskTitle = trim($_POST['taskTitle']);
+$taskStartDate = trim($_POST['taskStartDate']);
+$taskCompletionDate = trim($_POST['taskCompletionDate']);
+$taskElementsRaw = $_POST['taskElements'];
 $error = false;
 
 if(empty($taskTitle)) {
