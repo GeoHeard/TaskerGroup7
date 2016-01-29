@@ -1,12 +1,11 @@
 package uk.ac.aber.cs221.group_7.util.TaskerCli_GUI;
 import java.awt.Font;
-
 import javax.swing.JLabel;
 
 
 /**
  * A specialised JLabel that allows you to specify its font, font style and font size in the constructor
- * @author kurt
+ * @author Group 07: kuh1@aber.ac.uk
  */
 public class JSLabel extends JLabel{
 	

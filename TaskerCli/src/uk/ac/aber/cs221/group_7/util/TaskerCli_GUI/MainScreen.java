@@ -25,13 +25,21 @@ import uk.ac.aber.cs221.group_7.util.TaskerCli.TaskerCli;
 * All of the tasks are listed on the left hand side as buttons.
 * Once the button is pressed the middle JPanel is swapped for one containing
 * the information about the selected task.
-* @author kuh1
+* 
+* @author Group 07: kuh1@aber.ac.uk
+* @version 1.0
+* @date 29/01/2015
 */
 public class MainScreen extends JPanel{
+	//Allows us to call functions in the main class
 	private TaskerCli tasker;
+	//Stores the tasks that should currently be being displayed in the side menu
 	private ArrayList<Task> tasks;
+	//The panel that fits in the centre of the screen and displays the task info
 	private JPanel taskPanel;
+	//The current task that should be being displayed
 	private Task currentTask;
+	//The menu that displays all of the tasks the user should be able to see
 	private JMenuBar sideMenu;
 		
 	/**
@@ -72,7 +80,8 @@ public class MainScreen extends JPanel{
 	}
 	
 	/**
-	 *  If a task is no longer marked 'ALLOCATED' then the panel is removed
+	 *  checks to see if the currently displayed task is marked 'ALLOCATED',
+	 *  remove if not.
 	 */
 	public void refereshTaskPanel(){
 		if(currentTask.getStatus() != Status.ALLOCATED){

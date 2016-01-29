@@ -28,9 +28,9 @@ import uk.ac.aber.cs221.group_7.util.TaskerCli_GUI.JSLabel;
  * variables. After any changes are made, the task can interact 
  * with TaskerCli to call saveChanges.
  * 
- * @author Group 07: kuh1, ...
- * @version 0.2
- * @date 28/11/2015
+ * @author Group 07: kuh1@aber.ac.uk
+ * @version 1.0
+ * @date 29/01/2015
  */
 
 public class Task {
