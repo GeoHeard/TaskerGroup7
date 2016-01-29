@@ -20,6 +20,7 @@ loadInit("default", $conn);
         <p>TaskerMAN is part of a distributed software system for task management.</p>
         <p>It is available for download on <a id="github" href="https://github.com/GeorgePeorge/TaskerGroup7">GitHub</a></p>
         <p>For the full experience, you should also download the TaskerCLI Java Application.</p>
+        <img src="unicorn.png" />
     </div>
 </main>
 

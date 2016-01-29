@@ -33,7 +33,6 @@ if (isset($_POST["taskSelect"])) {
         }
 
         $sql = "UPDATE Task SET status='" . $currTask["status"] . "' WHERE taskID='" . $currTask["taskID"] . "';";
-        echo $sql;
         $sth = $conn->exec($sql);
 
     } catch (PDOException $e) {
