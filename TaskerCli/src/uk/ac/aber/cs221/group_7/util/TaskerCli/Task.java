@@ -1,3 +1,5 @@
+package uk.ac.aber.cs221.group_7.util.TaskerCli;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -14,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import uk.ac.aber.cs221.group_7.util.TaskerCli_GUI.JSLabel;
 
 /**
  * 

@@ -1,3 +1,4 @@
+package uk.ac.aber.cs221.group_7.util.TaskerCli_GUI;
 import java.awt.Font;
 
 import javax.swing.JLabel;
@@ -20,7 +21,7 @@ public class JSLabel extends JLabel{
 	 * @param fontSize
 	 * 			The size of the font
 	 */
-	JSLabel(String text, String fontName, int fontStyle, int fontSize){
+	public JSLabel(String text, String fontName, int fontStyle, int fontSize){
 		super(text);
 		
 		setFont(new Font(fontName, fontStyle, fontSize));
