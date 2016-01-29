@@ -99,6 +99,10 @@ loadInit("task", $conn);
                                 $optionPrint .= " selected";
                             }
                         }
+
+                        if ($currTask["status"] == "abandoned" || $currTask["status"] == "completed") {
+                            $optionPrint .= " disabled";
+                        }
                         $optionPrint .= ">" . $row['lastName'] . ", " . $row['firstName'] . " (" . $row['email'] . ")</option>";
                         echo $optionPrint;
                     }
@@ -119,11 +123,11 @@ loadInit("task", $conn);
                 <br/>
                 <label for="abandonTask">Abandon task?</label>
                 <input type="hidden" id="abandonTaskDefault" name="abandonTaskDefault"
-                       value="<?php if ($currTask["status"] == "abandoned") {
+                       value="<?php if ($currTask["status"] == "abandoned" || $currTask["status"] == "completed") {
                            echo "checked disabled";
                        } ?>"/>
                 <input type="checkbox" id="abandonTask" name="abandonTask"
-                       onchange="checkDropdown();" <?php if ($currTask["status"] == "abandoned") {
+                       onchange="checkDropdown();" <?php if ($currTask["status"] == "abandoned" || $currTask["status"] == "completed") {
                     echo "checked disabled";
                 } ?> />
                 <br/>
