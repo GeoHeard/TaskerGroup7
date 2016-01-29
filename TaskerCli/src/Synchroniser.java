@@ -38,9 +38,42 @@ public class Synchroniser{
 	public Synchroniser(String userEmail, TaskerCli mainProgram){
 		employeeEmail = userEmail;
 		tasker = mainProgram;
-		//Either just use one file name or come up with a better system e.g. loop until a char not in the set{<a-b,A-B,0-9>} appears.
-		fileName = userEmail.substring(0, 3) + ".txt";
+		fileName = generateFileName(userEmail);
 		repeatSynchronise = new Timer();
+	}
+	
+	/**
+	 * Generates the file name to store the users local data under
+	 * @param email
+	 * 			The users email
+	 * @return
+	 * 			A file name made up of the foremost characters of the users email
+	 */
+	private String generateFileName(String email){
+		String name = "";
+		
+		//If there isnt anything to generate a name from
+		if(email.length() < 1){
+			//Use a default
+			name = "localStorage";
+		}else{
+			//Loop through each character
+			for(int i = 0; i < email.length(); i++){
+				
+				//If it is a valid character for a file name
+				if(email.substring(i, i+1).matches("[a-zA-z0-9]")){
+					//Add it to the file name
+					name += email.charAt(i);
+				}else{
+					//We can quit now
+					i = email.length() + 1;
+				}
+			}
+		}
+		
+		name += ".txt";
+		
+		return name;
 	}
 	
 	/**
@@ -235,6 +268,8 @@ public class Synchroniser{
 	 */
 	private void saveToLocal(ArrayList<Task> tasks){
 		if(tasks == null){
+			return;
+		}else if(tasks.size() < 1){
 			return;
 		}
 		

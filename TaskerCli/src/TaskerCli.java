@@ -123,8 +123,8 @@ public class TaskerCli {
 		//First try to load the local data, then attempt to synchronise with TaskerSvr
 		tasks = synchroniser.retrieveTasksFromLocal();
 		tasks = synchroniser.synchroniseTasks(tasks);
-		
-		if(doRemember){
+			
+		if(doRemember && tasks != null && tasks.size() > 0){
 			saveLastEmail(userEmail);
 		}else{
 			saveLastEmail("");
@@ -136,8 +136,7 @@ public class TaskerCli {
 			//Null the synchroniser so we can start again.
 			synchroniser = null;
 			//Output error message
-			System.err.println("Sorry but no data could be found, try a different email");
-			System.out.println("");
+			JOptionPane.showMessageDialog(new JFrame("Error"), "Sorry but no data could be found, try a different email");
 		}else{
 			//We can now load the second user interface
 			initialiseMainScreen();

@@ -2,19 +2,19 @@ kuh1@aber.ac.uk
 11
 3
 Create taskerCLI
-abandoned
+completed
 2015-12-01
 2015-12-20
 0
 8
 walk dog
-abandoned
+completed
 2016-01-27
 2016-01-28
 0
 9
 feed cat
-abandoned
+completed
 2016-01-27
 2016-01-28
 0
@@ -35,17 +35,13 @@ bake a cake
 allocated
 2016-01-27
 2016-01-28
-1
-add eggs
-NO! NO! No! o
+0
 14
 save the world
 allocated
 2016-01-27
 2016-01-28
-1
-buy a cape
-ok!! Okk!!! ok ok ok okdw34r4wr4
+0
 16
 drink coffee
 completed
