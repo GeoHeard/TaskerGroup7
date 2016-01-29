@@ -2,6 +2,23 @@
 
 The tasker system is a method of creating and allocating tasks to users through a web client (TaskerMAN) web server (TaskerSVR) and a local client (TaskerCLI)
 
+INSTALLATION
+
+To install the TaskerCLI:
+The only prerequisite for installing TaskerCLI is that you are running the latest version of Java 
+(avaliable at: http://www.java.com/en/download/.)
+To install the TaskerSRV database:
+Load your MySQL database on the command line and execute the database set-up file available in our git repository.
+To set up the TaskerMAN website:
+    copy and paste the TaskerMan directory into your public_html. 
+    Ensure the permissions are set to: “644”
+For more detailed information, consult the FAQs towards the end of this document.
+
+email: twd@aber.ac.uk for more information
+
+...
+FAQs and Possible Problems
+
 PREREQUISITES
 
 Which Operating Systems will I be able to install taskerCLI on?
@@ -24,6 +41,7 @@ What is required for taskerSVR?
 
 taskerSVR runs on an apache server using a MySQL DBMS. To access the database requires a password and login.
 
+
 USING taskerCLI
 
 How do I login?
@@ -34,15 +52,20 @@ How do I update my task details?
 
 One’s tasks will be available to them immediately after logging in, listed on the margin of the window. Click on the task that is the subject of interest and add any new data into the fields displayed on the main part of the window. After updating fields, the user can discard their changes by clicking ‘Cancel’ or confirm them by clicking ‘Submit’ to attempt to save the data to the database.
 
-Can I view/ update another user’s tasks?
+Can I view/ update another user’s tasks from within taskerCLI?
 
 A user will only be able to see and edit their own task details after they login and before they log out; this is a security measure, and it also enables quick viewing of the tasks relevant to the one using the system.
 
+When/ how can I view tasks outside of taskerCLI?
+
+    Go to the taskerCLI file directory. Users who have logged into the system before will have their initials as the names of text files storing individual data. It is not recommended that one edits these files manually.
+
 taskerCLI ERRORS
 
-HOW DO I FIX BUG??
+What should I try if I am having problems with taskerCLI?
 
-Most errors that will occur with the client will arise from a loss of connection. If that is the case, the best thing to do is probably close the application down and reload it once the connection has returned.
+    Close the program, to the taskerCLI file directory, and delete the local data or move it into another directory if you need a backup. Reopen the program and try again.
+    If you are still having problems with reading and writing data then there may be issues with taskerSVR. Contact your Systems Administrator.
 
 USING taskerMAN
 
@@ -56,12 +79,12 @@ Select ‘Manage members’ in the top right corner of the page. Select the memb
 
 How do I delete a team member?
 
-Select the team member you wish to delete, a delete button will appear. Upon clicking it you will be prompted to confirm your deletion. Once deleted you will be redirected to the main page.
+Currently it is not possible to delete a team member.
 
 How do I filter tasks?  &
 Which parameters can I filter by?
 
-Select ‘Manage tasks’ in the top right corner of the page. Select ‘Filter tasks’ underneath the taskerMAN header. You will be able to select a ‘task status’ and an allocated ‘team member’ to filter by with two separate drop-down boxes. Press ‘Submit’ and the list of tasks will change. Press ‘Cancel’ to remove the filter (and cause problems). An example of filtering is to select ‘allocated’ and ‘Smith, John (jsmith@mail.com)’ and to be shown all of the tasks belonging to John Smith which have the status ‘allocated’.
+Select ‘Manage tasks’ in the top right corner of the page. Select ‘Filter tasks’ underneath the taskerMAN header. You will be able to select a ‘task status’ and an allocated ‘team member’ to filter by with two separate drop-down boxes. Press ‘Submit’ and the list of tasks will change. Press ‘Cancel’ to remove the filter (and cause problems). An example of filtering is to select ‘allocated’ and ‘Smith, John (jsmith@mail.com)’ and to be shown all of the tasks belonging to John Smith which have the status ‘allocated’. You can also select ‘any’ in either category to list, for example, every task belonging to John Smith regardless of status, or every task with a certain status regardless of who it is assigned to.
 
 How do I create a new task?
 
@@ -73,15 +96,12 @@ Select ‘Manage tasks’ in the top right corner of the page. Select the task y
 
 taskerMAN ERRORS
 
-HOW DO I FIX BUG??
+I am having connection issues, what should I do?
 
-Ask Chris?
+Contact the system administrator.
 
 taskerSVR
 
-HELP I CANNOT CONNECT!!
+I am having connection issues, what should I do?
 
-You’re probably screwed.
-Contact your network administrator for more details.
-
-email: twd@aber.ac.uk for more information
+Contact the system administrator.

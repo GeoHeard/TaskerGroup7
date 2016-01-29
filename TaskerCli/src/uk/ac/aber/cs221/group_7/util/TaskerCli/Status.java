@@ -1,11 +1,10 @@
 package uk.ac.aber.cs221.group_7.util.TaskerCli;
 /**
+ * A task has a status, it can either be ALLOCATED, COMPLETED or ABANDONED
  * 
- * 
- * 
- * @author Group 07: kuh1, ...
- * @version 0.2
- * @date 27/11/2015
+ * @author Group 07: kuh1@aber.ac.uk
+ * @version 1.0
+ * @date 29/01/2015
  */
 public enum Status {
 	ALLOCATED, COMPLETED, ABANDONED; 

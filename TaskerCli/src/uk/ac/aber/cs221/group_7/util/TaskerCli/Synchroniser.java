@@ -7,6 +7,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -18,17 +21,18 @@ import java.sql.*;
 /**
  * 
  * Provides all of the loading, synchronising and saving 
- * functionality of the program.
+ * functionality of the program. (locally and to/from TaskerSvr)
  * 
- * @author Group 07: kuh1, ...
- * @version 0.2
- * @date 28/11/2015
+ * @author Group 07: kuh1@aber.ac.uk, jah51, twd (@aber.ac.uk)
+ * @version 1.0
+ * @date 29/01/2015
  */
 public class Synchroniser{
 	
 	private String employeeEmail;
 	private TaskerCli tasker;
 	private String fileName;
+	//This object can be called by a timer to ask for synchronisation in 5 minutes
 	private Timer repeatSynchronise;
 	
 	/**
@@ -58,7 +62,7 @@ public class Synchroniser{
 		//If there isnt anything to generate a name from
 		if(email.length() < 1){
 			//Use a default
-			name = "localStorage";
+			name += "localStorage";
 		}else{
 			//Loop through each character
 			for(int i = 0; i < email.length(); i++){
@@ -463,14 +467,17 @@ public class Synchroniser{
 	}
 	
 	/**
-	 * 
-	 * @author kurt
+	 * This class provides a single task that can be called by a Timer.
+	 * That task is simply to call tasker.saveChanges() to initailiase 
+	 * synchronisation. Synchronisation should occur every 5 minutes of
+	 * inactivity.
+	 * @author kuh1@aber.ac.uk
 	 */
 	private class RepeatSynchroniser extends TimerTask {
 	    private TaskerCli tasker;
 		
 	    /**
-	     * 
+	     * Creates a new repeat synchroniser ready to be called by a Timer.
 	     * @param syncrhoniser
 	     */
 		RepeatSynchroniser(TaskerCli taskerCli){
@@ -479,7 +486,7 @@ public class Synchroniser{
 	    }
 		
 		/**
-		 * 
+		 * Calls tasker.saveChanges() to initlaise synchronisation.
 		 */
 		public void run() {
 			if(tasker != null){

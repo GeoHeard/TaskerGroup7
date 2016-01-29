@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -37,23 +38,25 @@ import com.sun.org.apache.bcel.internal.generic.RETURN;
  * 
  * This class is the centre of the program. It stores all of the 
  * tasks for the user and initialises the main components of the GUI.
- * The �main screen� is supposed to provide a list of buttons, one
+ * The 'main screen' is supposed to provide a list of buttons, one
  * for each class, that once pressed interacts with the given task 
  * object and loads the task into the GUI. This class provides a 
- * reference to the �synchroniser� so that when necessary, tasks can 
+ * reference to the 'synchroniser' so that when necessary, tasks can 
  * be loaded, synchronised or saved.
 
  * 
- * @author Group 07: kuh1, 
- * @version 0.2
- * @date 28/11/2015
+ * @author Group 07: kuh1, jah51, twd (@aber.ac.uk)
+ * @version 1.0
+ * @date 29/01/2015
  *
  */
 public class TaskerCli {
 	
 	private ArrayList<Task> tasks;
 	private Synchroniser synchroniser;
+	//The gui JFrame that will be the only GUI window throughout the program
 	private JFrame gui;
+	//The second screen the user sees (after logging on)
 	private MainScreen mainScreen;
 	
 	/**
@@ -69,8 +72,6 @@ public class TaskerCli {
 	 * Initialises the GUI that allows the user to log in.
 	 */
 	public void initialiseLoginScreen(){
-		//NEED CODE FOR REMEMBERED EMAIL
-		
 		//Create a new GUI frame
 		gui = new JFrame("TaskerCli: Login");
 		//Make sure the frame closes as expected
@@ -113,7 +114,6 @@ public class TaskerCli {
 	 * If successful the main screen GUI is loaded. If no
 	 * tasks could be retrieved an error message is output
 	 * and the user has to try a different email to continue.
-	 * I.E ALL ERROR CHECKING OF EMAIL DONE HERE, NOT IN GUI CLASS
 	 * @param userEmail
 	 * 				The input email address.
 	 * @param doRemember
@@ -157,7 +157,8 @@ public class TaskerCli {
 	}
 
 	/**
-	 * 
+	 * Resets the task panel on the GUI to show the comments before the user changes.
+	 * All changes are permanent if the user has hit 'save changes'
 	 */
 	void cancelChanges(){
 		//Here we want to reset the task panel
@@ -169,8 +170,10 @@ public class TaskerCli {
 	 * is run.
 	 */
 	private void saveLastEmail(String email){System.out.println(email);
+		String fileName = "lastEmail.txt";
+	
 		//Create a file writer
-		try(FileWriter fw = new FileWriter("lastEmail.txt");
+		try(FileWriter fw = new FileWriter(fileName);
 			BufferedWriter bw = new BufferedWriter(fw);
 			PrintWriter outfile = new PrintWriter(bw);){
 
@@ -178,6 +181,7 @@ public class TaskerCli {
 			outfile.println(email);
 		} catch (IOException e) {
 			System.err.println("Problem when trying to save last email");
+			System.out.println(e.toString());
 		}
 	}
 	
@@ -186,9 +190,10 @@ public class TaskerCli {
 	 */
 	private String readLastEmail(){
 		String lastEmail;
+		String fileName = "lastEmail.txt";
 		
 		//Try to read from the users file
-		try(FileReader fr = new FileReader("lastEmail.txt");
+		try(FileReader fr = new FileReader(fileName);
 			BufferedReader br = new BufferedReader(fr);
 			Scanner infile = new Scanner(br)){
 					
