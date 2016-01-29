@@ -2,12 +2,13 @@
 $taskTitle = trim($_GET['taskTitle']);
 $taskStartDate = trim($_GET['taskStartDate']);
 $taskCompletionDate = trim($_GET['taskCompletionDate']);
+$taskElementsRaw = $_GET['taskElements'];
 $error = false;
 
 if(empty($taskTitle)) {
     $taskTitleError = "Please enter a task title.";
     $error = true;
-}else if (preg_match('/[^a-zA-Z0-9 ]/', $taskTitle)){
+}else if (preg_match('/[^a-zA-Z0-9 -]/', $taskTitle)){
     $taskTitleError = "Task title is not valid. No symbols are allowed.";
     $error = true;
 }
@@ -34,6 +35,11 @@ if(empty($taskCompletionDate)) {
     $error = true;
 }else if ($taskCompletionDateTest < $taskStartDateTest) {
     $taskCompletionDateError = "Please enter a completion date that is on the same day as the start date or later.";
+    $error = true;
+}
+
+if (strlen($taskElementsRaw) == 0){
+    $taskElementsError = "Please enter at least 1 task element.";
     $error = true;
 }
 

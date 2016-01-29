@@ -14,23 +14,28 @@ if (isset($_POST["taskSelect"])) {
 
     $sth = $conn->prepare("SELECT description FROM TaskElement WHERE taskID=" . $currTask['taskID']);
     $sth->execute();
-    $currTask["taskElements"] = $sth->fetchAll(PDO::FETCH_COLUMN, 0); // all comments are put into currTask
+    $currTask["taskElements"] = implode(PHP_EOL, $sth->fetchAll(PDO::FETCH_COLUMN, 0)); // all comments are put into currTask
 // else if we've just updated the user details, fill the fields with what was previously in them
 }else if (isset($_POST["confirmTaskChanges"])) {
-    //require_once("../components/validators/validateTaskDetails.php");
-    $currTask = ["title"=>$_POST["taskTitleDefault"], "startDate"=>$_POST["startDateDefault"], "ecd"=>$_POST["expectedCompletionDateDefault"], "status"=>$_POST["taskStatusDefault"]];
-    $currTask["taskElements"] = explode("%0D%0A", $_POST["taskElements"]);
-    print_r($currTask);
+    $sth = $conn->prepare("SELECT taskID, title, memberEmail, startDate, ecd, status FROM Task WHERE taskID=" . $_POST['taskID'] . ";");
+    $sth->execute();
+    $currTask = $sth->fetch(PDO::FETCH_ASSOC);
+
+    $sth = $conn->prepare("SELECT description FROM TaskElement WHERE taskID=" . $currTask['taskID']);
+    $sth->execute();
+    $currTask["taskElements"] = implode(PHP_EOL, $sth->fetchAll(PDO::FETCH_COLUMN, 0)); // all comments are put into currTask
+    $currTask["teamMember"] = $_POST["teamMember"];
+    $currTask["status"] = $_POST["abandonTask"]=="on"?"abandoned":"allocated";
         try {
             if($_POST["teamMemberDefault"] != $_POST["teamMember"]) {
                 $sql = "UPDATE Task SET memberEmail='" . $_POST["teamMember"] . "' WHERE memberEmail='" . $_POST["teamMemberDefault"] . "';";
                 $sth = $conn->exec($sql);
             }
 
-            if($_POST["taskStatusDefault"] != $_POST["taskStatusDefault"]) {
-                $sql = "UPDATE Task SET status='" . $_POST["taskStatus"] . "' WHERE status='" . $_POST["taskStatusDefault"] . "';";
-                $sth = $conn->exec($sql);
-            }
+            $sql = "UPDATE Task SET status='" . $currTask["status"] . "' WHERE taskID='" . $currTask["taskID"] . "';";
+            echo $sql;
+            $sth = $conn->exec($sql);
+
         } catch(PDOException $e) {
             echo $e->getMessage();
         }
@@ -46,9 +51,9 @@ if (isset($_POST["taskSelect"])) {
         function checkDropdown(){
 
             var defaultTeamMemberSelected = document.getElementById('teamMember').options[document.getElementById('teamMember').selectedIndex].defaultSelected;
-            var defaultStatusSelected = document.getElementById('taskStatus').options[document.getElementById('taskStatus').selectedIndex].defaultSelected;
+            var abandonTaskChanged = (document.getElementById('abandonTask').checked) && (!(document.getElementById('abandonTask').disabled));
 
-            if(defaultTeamMemberSelected && defaultStatusSelected){
+            if(defaultTeamMemberSelected && abandonTaskChanged == false){
                 document.getElementById("toggledButton").disabled = true;
             }else{
                 document.getElementById("toggledButton").disabled = false;
@@ -61,8 +66,6 @@ if (isset($_POST["taskSelect"])) {
 <?php
 require_once("../components/init.php");
 loadInit("task", $conn);
-
-$statusValues = ["allocated", "abandoned", "completed"];
 ?>
 
 <main>
@@ -72,19 +75,27 @@ $statusValues = ["allocated", "abandoned", "completed"];
     <div id="mainBody">
         <form id="viewTaskForm" name="viewTaskForm" onsubmit="return checkDrodown()" action="?" method="POST">
             <fieldset>
+                <input type="hidden" id="taskID" name="taskID" value="<?php echo $currTask['taskID']; ?>" />
                 <label for="taskTitle">Task title</label>
                 <input type="hidden" id="taskTitleDefault" name="taskTitleDefault" value='<?php echo $currTask["title"]; ?>' />
                 <input type='text' id='taskTitle' name='taskTitle' value='<?php echo $currTask["title"]; ?>' disabled/>
                 <br />
                 <label for="teamMember">Allocated team member</label>
+                <input type="hidden" id="teamMemberDefault" name="teamMemberDefault" value='<?php echo $currTask["memberEmail"]; ?>' />
                 <select id='teamMember' name='teamMember' onchange='checkDropdown()'>
                     <?php
                     $query = "SELECT * FROM TeamMember";
                     $optionPrint = "";
                     foreach($conn->query($query) as $row){
                         $optionPrint = "<option value='" . $row['email'] . "'";
-                        if($row['email'] == $currTask['memberEmail']){
-                            $optionPrint .= " selected";
+                        if (isset($_POST["taskSelect"])) {
+                            if($row['email'] == $currTask['memberEmail']){
+                                $optionPrint .= " selected";
+                            }
+                        }else if (isset($_POST["confirmTaskChanges"])) {
+                            if($row['email'] == $_POST['teamMember']){
+                                $optionPrint .= " selected";
+                            }
                         }
                         $optionPrint .= ">" . $row['lastName'] . ", " . $row['firstName'] . " (" . $row['email'] . ")</option>";
                         echo $optionPrint;
@@ -97,24 +108,12 @@ $statusValues = ["allocated", "abandoned", "completed"];
                 <input type='date' id='startDate' name='startDate' value='<?php echo $currTask['startDate']; ?>' disabled/>
                 <br />
                 <label for="expectedCompletionDate">Expected completion date</label>
-                <input type="hidden" id="expectedCompletionDateDefault" name="expectedCompletionDateDefault" value='<?php echo $currTask["ecd"]; ?>' />
+                <input type="hidden" id="expectedCompletionDate" name="expectedCompletionDate" value='<?php echo $currTask["ecd"]; ?>' />
                 <input type='date' id='expectedCompletionDate' name='expectedCompletionDate' value='<?php echo $currTask['ecd']; ?>' disabled/>
                 <br />
-                <label for="taskStatus">Status</label>
-                <input type="hidden" id="taskStatusDefault" name="taskStatusDefault" value='<?php echo $currTask["status"]; ?>' />
-                <select name='taskStatus' id='taskStatus' onchange='checkDropdown()' value='<?php echo $currTask["status"]; ?>'>
-                    <?php
-                    $optionPrint = "";
-                    foreach($statusValues as $value){
-                        $optionPrint = "<option value='" . $value . "'";
-                        if($value == $currTask['status']){
-                            $optionPrint .= " selected";
-                        }
-                        $optionPrint .= ">" . $value . "</option>";
-                        echo $optionPrint;
-                    }
-                    ?>
-                </select>
+                <label for="abandonTask">Abandon task?</label>
+                <input type="hidden" id="abandonTaskDefault" name="abandonTaskDefault" value="<?php if ($currTask["status"] == "abandoned"){ echo "checked disabled"; } ?>" />
+                <input type="checkbox" id="abandonTask" name="abandonTask" onchange="checkDropdown();" <?php if ($currTask["status"] == "abandoned"){ echo "checked disabled"; } ?> />
                 <br />
                 <hr />
                 <input type="submit" id="toggledButton" name="confirmTaskChanges" value="Confirm changes" disabled />
@@ -123,16 +122,10 @@ $statusValues = ["allocated", "abandoned", "completed"];
         </form>
     </div>
     <div id="mainRight">
-        <input type="hidden" id="taskElements" name="taskElements" value='<?php echo $currTask["taskElements"]; ?>' />
-        <textarea name='taskElements' form="viewTaskForm" rows="6" cols="30">
-            <?php
-            foreach($currTask["taskElements"] as $taskComment){
-                echo $taskComment . "\n";
-            }
-            ?>
-        </textarea>
+        <label for="taskElements">Task elements - Please enter each element on a new line</label>
+        <input type="hidden" id="taskElementsDefault" name="taskElementsDefault" value='<?php echo $currTask["taskElements"]; ?>' />
+        <textarea name="taskElements" id="taskElements" form="viewTaskForm" rows="6" cols="30" onchange="checkDropdown()" disabled><?php echo $currTask["taskElements"] ?></textarea>
     </div>
 </main>
-
 </body>
 </html>

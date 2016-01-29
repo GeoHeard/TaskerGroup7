@@ -3,8 +3,9 @@ require_once("../components/dbconnect.php");
 $taskTitleError = "";
 $taskStartDateError = "";
 $taskCompletionDateError = "";
+$taskElementsError = "";
 
-$elements = preg_split('/\r\n|[\r\n]/', $_GET['taskElements']);
+$taskElements = preg_split('/\r\n|[\r\n]/', $_GET['taskElements']);
 
 if(!empty($_GET['newTaskSubmit'])) {//if submitted, then validate
 
@@ -17,17 +18,18 @@ if(!empty($_GET['newTaskSubmit'])) {//if submitted, then validate
     if(!$error){
         //Validation Success!
         //Do form processing like email, database etc here
+
         try {
             $sql = "INSERT INTO Task (title, memberEmail, startDate, ecd) VALUES ('$taskTitle', '". $_GET['taskTeamMember'] . "', '$taskStartDate', '$taskCompletionDate');";
             $conn->exec($sql);
             $last_id = $conn->lastInsertId();
-            foreach($elements as $element){
-                if ($element != ""){
-                    $sql = "INSERT INTO TaskElement (taskID, description) VALUES ('$last_id', '$element');";
+            foreach($taskElements as $taskElement){
+                if ($taskElement != ""){
+                    $sql = "INSERT INTO TaskElement (taskID, description) VALUES ('$last_id', '$taskElement');";
                     $conn->exec($sql);
                 }
             }
-            header("Location: ../actionsuccess.php");
+            //header("Location: ../actionsuccess.php");
 
         } catch(PDOException $e) {
             echo $e->getMessage();
@@ -93,8 +95,8 @@ header("refresh:300;url=../timeout.php");
     <div id="mainBodyRight">
         <label for="taskElements">Task elements - Please enter each element on a new line</label>
         <br />
-        <textarea name="taskElements" form="newTaskForm" rows="6" cols="30">
-        </textarea>
+        <textarea name="taskElements" form="newTaskForm" rows="6" cols="30"></textarea>
+        <span class='error'><?php echo $taskElementsError ?></span>
     </div>
 </main>
 
