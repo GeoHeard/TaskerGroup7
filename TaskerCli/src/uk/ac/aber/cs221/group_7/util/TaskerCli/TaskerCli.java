@@ -1,3 +1,5 @@
+package uk.ac.aber.cs221.group_7.util.TaskerCli;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -11,7 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import javax.swing.AbstractAction;
@@ -27,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import uk.ac.aber.cs221.group_7.util.TaskerCli_GUI.*;
 import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 /**

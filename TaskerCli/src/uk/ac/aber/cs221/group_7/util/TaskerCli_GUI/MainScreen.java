@@ -1,3 +1,5 @@
+package uk.ac.aber.cs221.group_7.util.TaskerCli_GUI;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,6 +15,10 @@ import javax.swing.JButton;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import uk.ac.aber.cs221.group_7.util.TaskerCli.Status;
+import uk.ac.aber.cs221.group_7.util.TaskerCli.Task;
+import uk.ac.aber.cs221.group_7.util.TaskerCli.TaskerCli;
 	
 /**
 * This class provides a JPanel that displays the main screen.
@@ -33,7 +39,7 @@ public class MainScreen extends JPanel{
 	* @param taskerCli
 	* 				The instance of the main class that the GUI will interact with to "login"
 	*/
-	MainScreen(TaskerCli taskerCli, ArrayList<Task> theTasks){
+	public MainScreen(TaskerCli taskerCli, ArrayList<Task> theTasks){
 		super();
 		tasker = taskerCli;
 		tasks = theTasks;

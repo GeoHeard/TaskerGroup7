@@ -1,3 +1,5 @@
+package uk.ac.aber.cs221.group_7.util.TaskerCli;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -11,6 +13,7 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.sql.*;
+
 
 /**
  * 
@@ -227,10 +230,13 @@ public class Synchroniser{
                 	//Get the comment
                 	Statement rStatement = connect.createStatement();
                 	ResultSet commentSet = rStatement.executeQuery("SELECT * FROM ElementComment WHERE taskElementID='"+elementID+"'");
+                	String comment = "";
                 	while(commentSet.next()){
-                		String comment = commentSet.getString("content");
-                		comments.add(comment);
+                		comment += commentSet.getString("content");
                 	}
+                	comments.add(comment);
+                	
+                	//Close the connection
                 	commentSet.close();
                 	rStatement.close();
                 }
