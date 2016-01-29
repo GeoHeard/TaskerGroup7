@@ -100,7 +100,7 @@ loadInit("member", $conn);
         </h2>
     </div>
     <div id="mainBody">
-        <form id="viewMemberForm" name="viewMemberForm" action="?" method="GET">
+        <form id="viewMemberForm" name="viewMemberForm" action="?" method="POST"">
             <fieldset>
                 <label for="memberLastName">Last name</label>
                 <input type="hidden" id="memberLastNameDefault" name="memberLastNameDefault" value='<?php echo $currMember["lastName"] ?>' />
