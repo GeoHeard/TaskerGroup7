@@ -54,6 +54,8 @@ if (isset($_POST["memberSelect"])) {
 
 } else if (isset($_POST['confirmMemberCancel'])) {
     header("Location: main.php");
+} else{
+    header("Location: main.php");
 }
 ?>
 <!DOCTYPE html>
