@@ -1,0 +1,34 @@
+CREATE TABLE ElementComment
+(
+commentID int(11) AUTO_INCREMENT,
+taskElementID int(11),
+content text,
+PRIMARY KEY(commentID)
+);
+
+CREATE TABLE Task
+(
+taskID int(11) AUTO_INCREMENT,
+title varchar(64),
+startDate date,
+ecd date,
+status enum('allocated' , 'abandoned' , 'completed') DEFAULT 'allocated',
+memberEmail varchar(64),
+PRIMARY KEY(taskID)
+);
+
+CREATE TABLE TaskElement
+(
+elementID int(11) AUTO_INCREMENT,
+taskID int(11),
+description text,
+PRIMARY KEY(elementID)
+);
+
+CREATE TABLE TeamMember
+(
+firstName varchar(64),
+lastName varchar(64),
+email varchar(64),
+PRIMARY KEY(email)
+);
