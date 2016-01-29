@@ -146,7 +146,7 @@ loadInit("task", $conn);
         <textarea name="taskElements" id="taskElements" form="viewTaskForm" rows="6" cols="30"
                   onchange="checkDropdown()" disabled><?php echo $currTask["taskElements"] ?></textarea>
     </div>
-    <form id="viewTaskElements" action="viewtaskelements.php" method="GET"></form>
+    <form id="viewTaskElements" action="viewtaskelements.php" target="_blank" method="GET"></form>
 </main>
 </body>
 </html>
